@@ -3,15 +3,19 @@ package Lab1.Homework;
 import java.util.Arrays;
 
 public class Image {
-    short[][] image;
+    private final short[][] image;
     Image(int n) {
         image = new short[n][n];
+    }
+    public short[][] getMatrix() {
+        return image;
     }
     public Image generateBlackRectangle(int x, int y, int width, int height) {
         if (x < 0)            x = 0;
         if (y < 0)            y = 0;
         if (x + width > image.length)  width = image.length - x;
         if (y + height > image[0].length) height = image[0].length - y;
+
         for (int i = x; i < x + width; i++) {
             for (int j = y; j < y + height; j++) {
                 image[i][j] = 255;
