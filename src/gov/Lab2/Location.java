@@ -1,10 +1,11 @@
 package gov.Lab2;
 
-public class Location {
+import javax.sound.sampled.Port;
+
+sealed abstract public class Location permits City, Airport, Restaurant {
     private int x, y;
     private String name;
     public enum Type {CITY, VILLAGE, AIRPORT, PORT, GAS_STATION, RESTAURANT, HOSPITAL, SCHOOL, PARK, MUSEUM, OTHER}
-    Type type;
 
     public int getX() {     return x;     }
     public Location setX(int x)
@@ -21,24 +22,23 @@ public class Location {
     {  this.name = name;
        return this;         }
 
-    public Type getType() {   return type;    }
-    public Location setType(Type type)
-    {  this.type = type;
-       return this;         }
+    abstract public Type getType();
 
-    public Location(int x, int y, String name, Type type) {
+    public Location(int x, int y, String name) {
         this.x = x;
         this.y = y;
         this.name = name;
-        this.type = type;
     }
+
+    abstract protected String getExtraString();
 
     @Override
     public String toString() {
         return name + ": {" +
-                "\ntype=" + type +
+                "\ntype=" + getType() +
                 ",\nx=" + x +
                 ",\ny=" + y +
+                getExtraString() +
                 "\n}";
     }
     @Override
@@ -48,7 +48,7 @@ public class Location {
 
         Location location = (Location) o;
 
-        if (!name.equals(location.name)) return false;
-        return type == location.type;
+        if (x != location.x) return false;
+        return name.equals(location.name);
     }
 }

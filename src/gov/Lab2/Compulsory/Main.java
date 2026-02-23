@@ -1,21 +1,20 @@
 package gov.Lab2.Compulsory;
 
-import gov.Lab2.Location;
-import gov.Lab2.Road;
+import gov.Lab2.*;
 
 public class Main {
     public static void main(String[] args) {
         Location[] locations = new Location[10];
-        locations[0] = new Location(1, 2, "CityA", Location.Type.CITY);
-        locations[1] = new Location(3, 4, "VillageB", Location.Type.VILLAGE);
-        locations[2] = new Location(5, 6, "AirportC", Location.Type.AIRPORT);
-        locations[3] = new Location(7, 8, "PortD", Location.Type.PORT);
-        locations[4] = new Location(9, 10, "GasStationE", Location.Type.GAS_STATION);
-        locations[5] = new Location(11, 12, "RestaurantF", Location.Type.RESTAURANT);
-        locations[6] = new Location(13, 14, "HospitalG", Location.Type.HOSPITAL);
-        locations[7] = new Location(15, 16, "SchoolH", Location.Type.SCHOOL);
-        locations[8] = new Location(17, 18, "ParkI", Location.Type.PARK);
-        locations[9] = new Location(19, 20, "MuseumJ", Location.Type.MUSEUM);
+        locations[0] = new City(1, 2, "City", 100000);
+        locations[1] = new City(3, 4, "Village", 2000);
+        locations[2] = new Airport(5, 6, "Airport", "www.airportc.com");
+        locations[3] = new Airport(7, 8, "CloudAir", "www.cloudd.com");
+        locations[4] = new Restaurant(9, 10, "GasBar", new int[]{4, 3, 6});
+        locations[5] = new Restaurant(11, 12, "Restaurant", new int[]{5, 4});
+        locations[6] = new City(13, 14, "Main", 23456783);
+        locations[7] = new City(15, 16, "Tiny", 400);
+        locations[8] = new Restaurant(17, 18, "ThePark", new int[]{5});
+        locations[9] = new Restaurant(19, 20, "FoodPlace", new int[]{4, 5, 3, 5, 5});
 
         Road[] roads = new Road[10];
         roads[0] = new Road(locations[0], locations[1], 5, 50, Road.Type.STREET);

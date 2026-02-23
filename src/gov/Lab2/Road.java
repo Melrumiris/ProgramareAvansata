@@ -29,6 +29,7 @@ public class Road {
         setSpeedLimit(speedLimit);
         setType(type);
     }
+
     @Override
     public String toString() {
             return "Road: {" +
