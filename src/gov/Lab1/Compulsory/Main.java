@@ -1,4 +1,4 @@
-package Lab1.Compulsory;
+package gov.Lab1.Compulsory;
 
 public class Main {
     static int nrToDigit(int n) {

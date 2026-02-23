@@ -1,4 +1,4 @@
-package Lab1.Homework;
+package gov.Lab1.Homework;
 
 import java.util.Arrays;
 

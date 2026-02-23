@@ -1,6 +1,6 @@
-package Lab1.Homework;
+package gov.Lab1.Homework;
 
-import Lab1.Advanced.Scanner;
+import gov.Lab1.Advanced.Scanner;
 
 public class Main {
     static String circle(Image image, int centerX, int centerY, int radius) {

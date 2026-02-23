@@ -1,6 +1,6 @@
-package Lab1.Advanced;
+package gov.Lab1.Advanced;
 
-import Lab1.Homework.Image;
+import gov.Lab1.Homework.Image;
 
 import java.util.HashMap;
 
