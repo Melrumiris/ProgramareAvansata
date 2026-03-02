@@ -113,6 +113,7 @@ sealed abstract public class Location permits City, Airport, Restaurant {
         Location location = (Location) o;
 
         if (x != location.x) return false;
+        if (y != location.y) return false;
         return name.equals(location.name);
     }
 }

@@ -30,15 +30,13 @@ public class Dijkstra {
         java.util.Map<Vertex<Location>, Integer> distances = new java.util.HashMap<>();
         java.util.Map<Vertex<Location>, Vertex<Location>> previous = new java.util.HashMap<>();
 
-        // Initialize distances
         for (Vertex<Location> location : graph.adjacencyList.keySet()) {
             distances.put(location, Integer.MAX_VALUE);
             previous.put(location, null);
         }
 
-        // Set start distance
         Vertex<Location> startVertex = new Vertex<>(startLocation);
-        // Find the actual key reference from the graph to ensure equality matches in maps
+
         for(Vertex<Location> v : graph.adjacencyList.keySet()) {
             if(v.equals(startVertex)) {
                 startVertex = v;
@@ -47,23 +45,19 @@ public class Dijkstra {
         }
         distances.put(startVertex, 0);
 
-        // Initialize queue with comparator
         java.util.PriorityQueue<Vertex<Location>> queue = new java.util.PriorityQueue<>(java.util.Comparator.comparingInt(distances::get));
 
-        // Add all nodes to queue AFTER distances are initialized
         queue.addAll(graph.adjacencyList.keySet());
 
         var end = new Vertex<>(endLocation);
         while (!queue.isEmpty()) {
             Vertex<Location> current = queue.poll();
 
-            // If distance is infinite, we can't reach any more nodes
             if (distances.get(current) == Integer.MAX_VALUE) break;
 
             if (current.equals(end))
                 break;
 
-            // Check if current has neighbors (it might be an isolated vertex or end of graph logic)
             if (graph.adjacencyList.get(current) == null) continue;
 
             for (Vertex<Location> neighbor : graph.adjacencyList.get(current).keySet()) {
