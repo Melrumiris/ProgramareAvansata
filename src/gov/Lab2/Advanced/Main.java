@@ -45,7 +45,7 @@ public class Main {
             graph.addLocation(location);
         }
         HashSet<Road> roads = new HashSet<>();
-        int maxRoads = random.nextInt(locations.length * (locations.length - 1) / 2);
+        int maxRoads = random.nextInt(random.nextInt(locations.length * (locations.length - 1) / 2));
         for (int i = 0; i < maxRoads; i++){
             Location location1 = locations[random.nextInt(locations.length)];
             Location location2 = locations[random.nextInt(locations.length)];
@@ -71,7 +71,7 @@ public class Main {
      */
     public static void main(String[] args) {
         Random random = new Random();
-        var locations = new Location[random.nextInt(1000)];
+        var locations = new Location[random.nextInt(10000)+2];
         Graph graph = generateGraph(locations);
         Location from = locations[random.nextInt(locations.length)];
         Location to = locations[random.nextInt(locations.length)];
