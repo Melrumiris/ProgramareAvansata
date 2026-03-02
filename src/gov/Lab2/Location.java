@@ -1,7 +1,5 @@
 package gov.Lab2;
 
-import javax.sound.sampled.Port;
-
 /**
  * Abstract sealed base class representing a geographic location on a 2D map.
  * <p>
