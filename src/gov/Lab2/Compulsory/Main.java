@@ -2,7 +2,24 @@ package gov.Lab2.Compulsory;
 
 import gov.Lab2.*;
 
+/**
+ * Entry point for the Compulsory Lab 2 exercise.
+ * <p>
+ * Creates a fixed set of {@link Location}s and {@link Road}s and prints
+ * their string representations to standard output.
+ * </p>
+ */
 public class Main {
+
+    /**
+     * Application entry point.
+     * <p>
+     * Instantiates ten hard-coded locations (cities, airports, and restaurants),
+     * connects them with ten roads of various types, and prints each object.
+     * </p>
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         Location[] locations = new Location[10];
         locations[0] = new City(1, 2, "City", 100000);
