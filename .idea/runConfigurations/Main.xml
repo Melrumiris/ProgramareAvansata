@@ -2,7 +2,7 @@
   <configuration default="false" name="Main" type="Application" factoryName="Application" activateToolWindowBeforeRun="false" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="gov.Lab1.Homework.Main" />
     <module name="progAvansLab" />
-    <option name="PROGRAM_PARAMETERS" value="test 35000 rectangle 20 20 18 15 bounded" />
+    <option name="PROGRAM_PARAMETERS" value="100 circle 20 20 18 bounded" />
     <option name="VM_PARAMETERS" value="-Xms16G -Xmx16G" />
     <extension name="coverage">
       <pattern>

@@ -4,7 +4,7 @@
 >
 
 >[matrixSize] cricle [circleCenterX] [circleCenterY] [radius]  
-> - Example: 100 rectangle 25 25 20 
+> - Example: 100 circle 25 25 20 
 
 >[matrixSize] rectangle [rectangleCornerX] [rectangleCornerY] [rectangleWidth] [rectangleHeight]  
 > - Example: 100 rectangle 20 20 25 30

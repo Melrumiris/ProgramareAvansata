@@ -1,12 +1,18 @@
 package gov.Lab3;
 
+import java.util.Date;
+import java.util.HashSet;
+
 public class Person implements Profile {
     long ID;
     String name;
+    Date birthDate;
+    HashSet<Profile> relations;
 
     public Person(long ID, String name) {
         this.ID = ID;
         this.name = name;
+        relations = new HashSet<>();
     }
 
     @Override
@@ -32,12 +38,59 @@ public class Person implements Profile {
     }
 
     @Override
+    public int hashCode() {
+        return (int) ID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Profile) {
+            return this.name.equals(((Profile) o).getName());
+        }
+        return false;
+    }
+
+    @Override
     public long getID() {
         return ID;
     }
 
     @Override
     public int compareTo(Profile o) {
-        return (int) (this.ID - o.getID());
+        return name.compareTo(o.getName());
     }
+
+    @Override
+    public HashSet<Profile> getRelations() {
+        return relations;
+    }
+
+    @Override
+    public Person addRelation(Profile profile) {
+        relations.add(profile);
+        return this;
+    }
+
+    @Override
+    public Person removeRelation(Profile profile) {
+        relations.remove(profile);
+        return this;
+    }
+
+    @Override
+    public double getImportance() {
+        return relations.size();
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public Person setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+        return this;
+    }
+
+
 }
+
