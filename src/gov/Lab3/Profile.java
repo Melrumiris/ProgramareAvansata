@@ -1,6 +1,6 @@
 package gov.Lab3;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 public interface Profile extends Comparable<Profile> {
     String getName();
@@ -11,9 +11,9 @@ public interface Profile extends Comparable<Profile> {
 
     Profile setID(long ID);
 
-    HashSet<Profile> getRelations();
+    HashMap<Profile, Relationship> getRelations();
 
-    Profile addRelation(Profile profile);
+    Profile addRelation(Profile profile, Relationship relationship);
 
     Profile removeRelation(Profile profile);
 

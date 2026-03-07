@@ -26,10 +26,10 @@ public class Network {
         return this;
     }
 
-    public Network addRelation(Profile profile1, Profile profile2) {
+    public Network addRelation(Profile profile1, Profile profile2, Relationship relationship) {
         if (members.contains(profile1) && members.contains(profile2)) {
-            profile1.addRelation(profile2);
-            profile2.addRelation(profile1);
+            profile1.addRelation(profile2, relationship);
+            profile2.addRelation(profile1, relationship);
         }else {
             throw new IllegalArgumentException("Both profiles must be in the network.");
         }
@@ -54,7 +54,7 @@ public class Network {
                 .forEach(profile -> {
                     sb.append(profile.getName()).append(" (")
                       .append(profile.getImportance()).append("):\n\t");
-                    for (Profile relation : profile.getRelations()) {
+                    for (Profile relation : profile.getRelations().keySet()) {
                         sb.append(relation.getName()).append(", ");
                     }
                     sb.append("\n");

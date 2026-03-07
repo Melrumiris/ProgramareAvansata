@@ -1,18 +1,19 @@
 package gov.Lab3;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Person implements Profile {
     long ID;
     String name;
     Date birthDate;
-    HashSet<Profile> relations;
+    HashMap<Profile, Relationship> relations;
 
     public Person(long ID, String name) {
         this.ID = ID;
         this.name = name;
-        relations = new HashSet<>();
+        relations = new HashMap<>();
     }
 
     @Override
@@ -61,13 +62,13 @@ public class Person implements Profile {
     }
 
     @Override
-    public HashSet<Profile> getRelations() {
+    public HashMap<Profile, Relationship> getRelations() {
         return relations;
     }
 
     @Override
-    public Person addRelation(Profile profile) {
-        relations.add(profile);
+    public Person addRelation(Profile profile, Relationship relationship) {
+        relations.put(profile, relationship);
         return this;
     }
 

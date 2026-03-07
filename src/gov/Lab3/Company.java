@@ -1,16 +1,17 @@
 package gov.Lab3;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Company implements Profile {
     long ID;
     String name;
-    HashSet<Profile> relations;
+    HashMap<Profile, Relationship> relations;
 
     public Company(long ID, String name) {
         this.ID = ID;
         this.name = name;
-        relations = new HashSet<>();
+        relations = new HashMap<>();
     }
 
     @Override
@@ -59,8 +60,8 @@ public class Company implements Profile {
     }
 
     @Override
-    public Company addRelation(Profile profile) {
-        relations.add(profile);
+    public Company addRelation(Profile profile, Relationship relationship) {
+        relations.put(profile, relationship);
         return this;
     }
 
@@ -71,7 +72,7 @@ public class Company implements Profile {
     }
 
     @Override
-    public HashSet<Profile> getRelations() {
+    public HashMap<Profile, Relationship> getRelations() {
         return relations;
     }
 
