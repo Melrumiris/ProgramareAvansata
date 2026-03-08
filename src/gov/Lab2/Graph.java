@@ -11,7 +11,9 @@ import java.util.Set;
  * </p>
  */
 public class Graph {
-    /** The adjacency list storing all vertices and their outgoing edges. */
+    /**
+     * The adjacency list storing all vertices and their outgoing edges.
+     */
     public HashMap<Vertex<Location>, HashMap<Vertex<Location>, Road>> adjacencyList;
 
     /**
@@ -84,8 +86,7 @@ public class Graph {
      *
      * @param start   the starting vertex
      * @param end     the target vertex
-     * @param visited a set used to track already-visited vertices during traversal;
-     *                should be empty when called externally
+     * @param visited a set used to track already-visited vertices during traversal;                should be empty when called externally
      * @return {@code true} if a path from {@code start} to {@code end} exists
      */
     public boolean hasPath(Vertex<Location> start, Vertex<Location> end, Set<Vertex<Location>> visited) {
@@ -96,7 +97,6 @@ public class Graph {
             if (!visited.contains(neighbor) && hasPath(neighbor, end, visited))
                 return true;
         }
-        visited.remove(start);
         return false;
     }
 }

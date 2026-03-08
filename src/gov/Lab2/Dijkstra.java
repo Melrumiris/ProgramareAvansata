@@ -23,8 +23,7 @@ public class Dijkstra {
      * @param endLocation   the destination location
      * @param graph         the graph to search
      * @param metric        a function that maps a {@link Road} to its integer cost
-     * @return an array of {@link Location}s representing the optimal path from start to end,
-     *         in order; returns an empty array if no path exists
+     * @return an array of {@link Location}s representing the optimal path from start to end,         in order; returns an empty array if no path exists
      */
     public static Location[] findBestPath(Location startLocation, Location endLocation, Graph graph, Function<Road,Integer> metric){
         java.util.Map<Vertex<Location>, Integer> distances = new java.util.HashMap<>();

@@ -2,14 +2,39 @@ package gov.Lab1.Homework;
 
 import java.util.Arrays;
 
+/**
+ * The type Image.
+ */
 public class Image {
     private final short[][] image;
+
+    /**
+     * Instantiates a new Image.
+     *
+     * @param n the n
+     */
     Image(int n) {
         image = new short[n][n];
     }
+
+    /**
+     * Get matrix short [ ] [ ].
+     *
+     * @return the short [ ] [ ]
+     */
     public short[][] getMatrix() {
         return image;
     }
+
+    /**
+     * Generate black rectangle image.
+     *
+     * @param x      the x
+     * @param y      the y
+     * @param width  the width
+     * @param height the height
+     * @return the image
+     */
     public Image generateBlackRectangle(int x, int y, int width, int height) {
         if (x < 0)            x = 0;
         if (y < 0)            y = 0;
@@ -22,6 +47,15 @@ public class Image {
             }
         }return this;
     }
+
+    /**
+     * Generate white circle image.
+     *
+     * @param centerX the center x
+     * @param centerY the center y
+     * @param radius  the radius
+     * @return the image
+     */
     public Image generateWhiteCircle(int centerX, int centerY, int radius) {
         for (int i = 0; i < image.length; i++) {
             for (int j = 0; j < image[i].length; j++) {
@@ -31,6 +65,13 @@ public class Image {
             }
         }return this;
     }
+
+    /**
+     * Fill image image.
+     *
+     * @param value the value
+     * @return the image
+     */
     public Image fillImage(int value) {
         for (short[] colors : image) {
             Arrays.fill(colors, (short) value);

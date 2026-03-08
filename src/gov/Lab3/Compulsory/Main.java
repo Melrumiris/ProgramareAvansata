@@ -7,7 +7,15 @@ import gov.Lab3.Profile;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * The type Main.
+ */
 public class Main {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     static public void main(String[] args) {
         Random random = new Random();
         Profile[] profiles = new Profile[10];

@@ -12,9 +12,46 @@ public class Road {
     /**
      * Enumeration of road types.
      */
-    public enum Type {HIGHWAY, STREET, AVENUE, BOULEVARD, LANE, ALLEY, OTHER}
+    public enum Type {
+        /**
+         * Highway type.
+         */
+        HIGHWAY,
+        /**
+         * Street type.
+         */
+        STREET,
+        /**
+         * Avenue type.
+         */
+        AVENUE,
+        /**
+         * Boulevard type.
+         */
+        BOULEVARD,
+        /**
+         * Lane type.
+         */
+        LANE,
+        /**
+         * Alley type.
+         */
+        ALLEY,
+        /**
+         * Other type.
+         */
+        OTHER}
 
-    int length, speedLimit;
+    /**
+     * The Length.
+     */
+    int length, /**
+     * The Speed limit.
+     */
+    speedLimit;
+    /**
+     * The Type.
+     */
     Type type;
 
     /**

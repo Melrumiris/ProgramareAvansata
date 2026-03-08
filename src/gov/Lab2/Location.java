@@ -14,7 +14,51 @@ sealed abstract public class Location permits City, Airport, Restaurant {
     /**
      * Enumeration of possible location types.
      */
-    public enum Type {CITY, VILLAGE, AIRPORT, PORT, GAS_STATION, RESTAURANT, HOSPITAL, SCHOOL, PARK, MUSEUM, OTHER}
+    public enum Type {
+        /**
+         * City type.
+         */
+        CITY,
+        /**
+         * Village type.
+         */
+        VILLAGE,
+        /**
+         * Airport type.
+         */
+        AIRPORT,
+        /**
+         * Port type.
+         */
+        PORT,
+        /**
+         * Gas station type.
+         */
+        GAS_STATION,
+        /**
+         * Restaurant type.
+         */
+        RESTAURANT,
+        /**
+         * Hospital type.
+         */
+        HOSPITAL,
+        /**
+         * School type.
+         */
+        SCHOOL,
+        /**
+         * Park type.
+         */
+        PARK,
+        /**
+         * Museum type.
+         */
+        MUSEUM,
+        /**
+         * Other type.
+         */
+        OTHER}
 
     /**
      * Returns the x-coordinate of this location.

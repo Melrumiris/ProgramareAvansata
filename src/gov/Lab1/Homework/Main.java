@@ -2,13 +2,42 @@ package gov.Lab1.Homework;
 
 import gov.Lab1.Advanced.Scanner;
 
+/**
+ * The type Main.
+ */
 public class Main {
+    /**
+     * Circle string.
+     *
+     * @param image   the image
+     * @param centerX the center x
+     * @param centerY the center y
+     * @param radius  the radius
+     * @return the string
+     */
     static String circle(Image image, int centerX, int centerY, int radius) {
         return image.fillImage(255).generateWhiteCircle(centerX,centerY,radius).toString();
     }
+
+    /**
+     * Rectangle string.
+     *
+     * @param image  the image
+     * @param x      the x
+     * @param y      the y
+     * @param width  the width
+     * @param height the height
+     * @return the string
+     */
     static String rectangle(Image image, int x, int y, int width, int height) {
         return image.fillImage(0).generateBlackRectangle(x,y,width,height).toString();
     }
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         if (args == null || args.length < 2) {
             System.err.println("Invalid number of arguments");

@@ -6,7 +6,15 @@ import gov.Lab3.Generators.Identifier;
 import gov.Lab3.Generators.Namer;
 import gov.Lab3.Generators.ProfileGenerator;
 
+/**
+ * The type Main.
+ */
 public class Main {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         Network network = new Network();
         for (int i = 0; i < 10; i++) {

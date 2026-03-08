@@ -4,7 +4,16 @@ import gov.Lab1.Homework.Image;
 
 import java.util.HashMap;
 
+/**
+ * The type Scanner.
+ */
 public class Scanner {
+    /**
+     * Determine bg short.
+     *
+     * @param matrix the matrix
+     * @return the short
+     */
     static short determineBG(short[][] matrix){
         var colorCount = new HashMap<Short, Integer>();
         int value;
@@ -31,6 +40,13 @@ public class Scanner {
         }
         return bg_color;
     }
+
+    /**
+     * Bounding rectangle.
+     *
+     * @param image the image
+     * @return the rectangle
+     */
     public static Rectangle Bounding(Image image) {
         var matrix = image.getMatrix();
         var result = new Rectangle();
@@ -49,8 +65,27 @@ public class Scanner {
         return result;
     }
 
+    /**
+     * The type Rectangle.
+     */
     public static class Rectangle {
-        int x, y, width, height;
+        /**
+         * The X.
+         */
+        int x, /**
+         * The Y.
+         */
+        y, /**
+         * The Width.
+         */
+        width, /**
+         * The Height.
+         */
+        height;
+
+        /**
+         * Instantiates a new Rectangle.
+         */
         Rectangle() {
             x = Integer.MAX_VALUE;
             y = Integer.MAX_VALUE;
