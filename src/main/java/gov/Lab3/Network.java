@@ -21,7 +21,7 @@ import java.util.HashSet;
  *   System.out.println(net);
  * }*</pre>
  *
- * @see gov.Lab3.NetworkAnalyzer
+ * @see NetworkAnalyzer
  */
 public class Network {
     /**

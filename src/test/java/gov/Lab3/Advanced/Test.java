@@ -467,11 +467,11 @@ public class Test {
             Set<Profile>       aps1 = shared.findArticulationPoints(n1);
             List<Set<Profile>> bcc1 = shared.findBiconnectedComponents(n1);
 
-            Set<Profile>       aps2 = shared.findArticulationPoints(n2);
-            List<Set<Profile>> bcc2 = shared.findBiconnectedComponents(n2);
-
             assertTrue(aps1.isEmpty(), "Triangle has no APs");
             assertEquals(1, bcc1.size(), "Triangle is one BCC");
+
+            Set<Profile>       aps2 = shared.findArticulationPoints(n2);
+            List<Set<Profile>> bcc2 = shared.findBiconnectedComponents(n2);
 
             assertEquals(2, aps2.size(), "Chain X-Y-Z-W has 2 APs");
             assertEquals(3, bcc2.size(), "Chain X-Y-Z-W has 3 BCCs");

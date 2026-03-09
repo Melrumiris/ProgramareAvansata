@@ -63,7 +63,7 @@ public class Graph {
      * @return {@code true} if the graph is valid, {@code false} otherwise
      */
     public boolean isValid(){
-        HashMap<Road, Integer> edges = new java.util.HashMap<>();
+        HashMap<Road, Integer> edges = new HashMap<>();
         for (Vertex<Location> first : adjacencyList.keySet()){
             for (Vertex<Location> second : adjacencyList.keySet())
                 if (first.getData().equals(second.getData()))
