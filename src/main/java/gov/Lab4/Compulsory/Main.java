@@ -9,16 +9,16 @@ import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
-        List<Street> streets = new LinkedList<>();
+        Random random = new Random();
+
         Set<Intersection> intersections = IntStream.range(0, 10)
                 .mapToObj(i -> new Intersection("v" + i))
                 .collect(Collectors.toCollection(HashSet::new));
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            Street street = new Street("s" + i, random.nextInt(80), new Intersection("v" + i), new Intersection("v" + ((i + 1) % 10)));
-            streets.add(street);
-        }
-        streets.sort(Comparator.comparingInt(Street::getLength));
+
+        List<Street> streets = IntStream.range(0, 10)
+                .mapToObj(i -> new Street("s" + i, random.nextInt(80), new Intersection("v" + i), new Intersection("v" + ((i + 1) % 10))))
+                .sorted(Comparator.comparingInt(Street::getLength)).collect(Collectors.toCollection(LinkedList::new));
+
         System.out.println("Intersection count:" + intersections.size());
         intersections.add(new Intersection("v1"));
         System.out.println("Intersection count after adding duplicate:" + intersections.size());
