@@ -65,10 +65,6 @@ public class NetworkAnalyzer {
     /** Collected biconnected components – each is a set of profiles. */
     private final List<Set<Profile>> biconnectedComponents = new ArrayList<>();
 
-    // -------------------------------------------------------------------------
-    // Public API
-    // -------------------------------------------------------------------------
-
     /**
      * Finds all <em>articulation points</em> (cut vertices) in the given network.
      * <p>
@@ -112,9 +108,6 @@ public class NetworkAnalyzer {
         return Collections.unmodifiableList(biconnectedComponents);
     }
 
-    // -------------------------------------------------------------------------
-    // Core DFS
-    // -------------------------------------------------------------------------
 
     /**
      * Resets all internal state so the analyzer can be reused for a new network.

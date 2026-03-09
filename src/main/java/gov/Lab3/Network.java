@@ -126,12 +126,24 @@ public class Network {
      *
      * @return formatted string representation of the whole network
      */
+    public String sortedString(){
+        StringBuilder sb = new StringBuilder();
+        members.stream().sorted((p1, p2) -> Double.compare(p2.getImportance(), p1.getImportance()))
+                .forEach(profile -> {
+            sb.append(profile.getName()).append(" (")
+                    .append(profile.getImportance()).append("):\n\t");
+            for (Profile relation : profile.getRelations().keySet()) {
+                sb.append(relation.getName()).append(", ");
+            }
+            sb.append("\n");
+        });
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        members.stream()
-                .sorted((p1, p2) -> Double.compare(p2.getImportance(), p1.getImportance()))
-                .forEach(profile -> {
+        members.forEach(profile -> {
                     sb.append(profile.getName()).append(" (")
                       .append(profile.getImportance()).append("):\n\t");
                     for (Profile relation : profile.getRelations().keySet()) {

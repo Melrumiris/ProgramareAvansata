@@ -41,6 +41,6 @@ public class Main {
                 }
             }
         }
-        System.out.println(network);
+        System.out.println(network.sortedString());
     }
 }
