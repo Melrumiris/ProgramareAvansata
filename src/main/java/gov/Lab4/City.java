@@ -1,44 +1,61 @@
 package gov.Lab4;
 
-import java.util.HashSet;
-import java.util.LinkedList;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.builder.GraphBuilder;
+
+import java.awt.*;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class City {
-    public HashSet<Street> streets;
-    public LinkedList<Intersection> linkedList;
+    Graph<Intersection, Street> graph;
 
     public City() {
-        streets = new HashSet<>();
-        linkedList = new LinkedList<>();
+        graph = new SimpleGraph<>(IntersectionSupplier.getInstance(), StreetSupplier.getInstance(), true);
     }
 
-    public City addStreet(Street street) {
-        streets.add(street);
+    public City(Graph<Intersection, Street> graph) {
+        this.graph = graph;
+    }
+
+    public City addIntersection(){
+        graph.addVertex();
         return this;
     }
 
     public City addIntersection(Intersection intersection) {
-        linkedList.add(intersection);
+        graph.addVertex(intersection);
         return this;
     }
 
-    public HashSet<Street> getStreets() {
-        return streets;
-    }
-
-    public LinkedList<Intersection> getIntersections() {
-        return linkedList;
-    }
-
-    public City removeStreet(Street street) {
-        streets.remove(street);
+    public City addIntersections(Collection<Intersection> intersections) {
+        intersections.forEach(graph::addVertex);
         return this;
     }
 
-    public City removeIntersection(Intersection intersection) {
-        linkedList.remove(intersection);
+    public City addStreet(Intersection from, Intersection to, Street street) {
+        if (from != to)
+            graph.addEdge(from, to, street);
         return this;
     }
 
+    public City addStreet(Intersection from, Intersection to){
+        if (from != to)
+            graph.addEdge(from, to);
+        return this;
+    }
 
+    public Set<Intersection> getIntersections() {
+        return graph.vertexSet();
+    }
+
+    public Set<Street> getStreets() {
+        return graph.edgeSet();
+    }
+
+    public Graph<Intersection, Street> getGraph() {
+        return graph;
+    }
 }

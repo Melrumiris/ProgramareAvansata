@@ -16,7 +16,7 @@ public class Main {
                 .collect(Collectors.toCollection(HashSet::new));
 
         List<Street> streets = IntStream.range(0, 10)
-                .mapToObj(i -> new Street("s" + i, random.nextInt(80), new Intersection("v" + i), new Intersection("v" + ((i + 1) % 10))))
+                .mapToObj(i -> new Street("s" + i, random.nextInt(80) + 20))
                 .sorted(Comparator.comparingInt(Street::getLength)).collect(Collectors.toCollection(LinkedList::new));
 
         System.out.println("Intersection count:" + intersections.size());
