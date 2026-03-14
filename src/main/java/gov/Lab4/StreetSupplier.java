@@ -18,6 +18,6 @@ public class StreetSupplier implements Supplier<Street> {
 
     @Override
     public Street get() {
-        return new Street(faker.address().streetAddress(), faker.number().numberBetween(80, 10000));
+        return new Street(faker.address().streetAddress(), faker.number().randomDouble(2,80, 10000));
     }
 }

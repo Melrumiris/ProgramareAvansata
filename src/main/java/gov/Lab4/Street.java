@@ -1,12 +1,10 @@
 package gov.Lab4;
 
-import java.util.Set;
-
 public class Street {
     private String name;
-    private int length;
+    private double length;
 
-    public Street(String name, int length) {
+    public Street(String name, double length) {
         this.name = name;
         this.length = length;
     }
@@ -17,10 +15,10 @@ public class Street {
         this.name = name;
         return this;
     }
-    public int getLength() {
+    public double getLength() {
         return length;
     }
-    public Street setLength(int length) {
+    public Street setLength(double length) {
         this.length = length;
         return this;
     }
