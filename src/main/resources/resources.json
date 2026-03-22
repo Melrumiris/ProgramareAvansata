@@ -1,0 +1,86 @@
+[
+    {
+        "id": "knuth67",
+        "title": "The Art of Computer Programming",
+        "location": "d:/books/programming/tacp.ps",
+        "year": 1967,
+        "authors": "Donald E. Knuth",
+        "description": "The foundational multi-volume work on computer programming algorithms and their rigorous mathematical analysis.",
+        "concepts": [
+            "Algorithms",
+            "Data Structures",
+            "Computer Science",
+            "Mathematics"
+        ]
+    },
+    {
+        "id": "jvm25",
+        "title": "The Java Virtual Machine Specification",
+        "location": "https://docs.oracle.com/javase/specs/jvms/se25/html/index.html",
+        "year": 2025,
+        "authors": "Tim Lindholm, Frank Yellin, Gilad Bracha, Alex Buckley",
+        "description": "The definitive and official specification for the Java Virtual Machine, detailing its instruction set, architecture, and class file format.",
+        "concepts": [
+            "Java",
+            "JVM",
+            "Specification",
+            "Virtual Machine"
+        ]
+    },
+    {
+        "id": "java25",
+        "title": "The Java Language Specification",
+        "location": "https://docs.oracle.com/javase/specs/jls/se25/jls25.pdf",
+        "year": 2025,
+        "authors": "James Gosling, Bill Joy, Guy Steele, Gilad Bracha, Alex Buckley",
+        "description": "The comprehensive technical reference defining the syntax, semantics, and core constructs of the Java programming language.",
+        "concepts": [
+            "Java",
+            "Language Design",
+            "Specification",
+            "Syntax"
+        ]
+    },
+    {
+        "id": "gof94",
+        "title": "Design Patterns: Elements of Reusable Object-Oriented Software",
+        "location": "library/architecture/gof.pdf",
+        "year": 1994,
+        "authors": "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
+        "description": "The undisputed textbook on software design patterns, essential for architecting robust and scalable object-oriented systems.",
+        "concepts": [
+            "Design Patterns",
+            "Software Architecture",
+            "OOP",
+            "Best Practices"
+        ]
+    },
+    {
+        "id": "martin08",
+        "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+        "location": "https://example.com/clean-code-reference",
+        "year": 2008,
+        "authors": "Robert C. Martin",
+        "description": "A masterclass in writing readable, maintainable, and elegant code. Mandatory reading for serious software engineers.",
+        "concepts": [
+            "Clean Code",
+            "Agile",
+            "Refactoring",
+            "Craftsmanship"
+        ]
+    },
+    {
+        "id": "kleppmann17",
+        "title": "Designing Data-Intensive Applications",
+        "location": "d:/books/data/ddia.epub",
+        "year": 2017,
+        "authors": "Martin Kleppmann",
+        "description": "An uncompromising deep dive into the architecture of modern data systems, covering distributed databases, stream processing, and scalability.",
+        "concepts": [
+            "Distributed Systems",
+            "Databases",
+            "Scalability",
+            "Data Engineering"
+        ]
+    }
+]
