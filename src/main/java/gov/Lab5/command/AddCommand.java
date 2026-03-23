@@ -1,6 +1,7 @@
 package gov.Lab5.command;
 
 
+import gov.Lab5.exception.InvalidResourceException;
 import gov.Lab5.model.Resource;
 import gov.Lab5.repository.Repository;
 
@@ -13,7 +14,7 @@ public class AddCommand implements Command {
     public AddCommand(Repository repo) { this.repository = repo; }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws InvalidResourceException {
         if (args.length < 5) {
             System.out.println("Usage: add <id> <title> <location> <year> <authors> [concept1,concept2...]");
             return;

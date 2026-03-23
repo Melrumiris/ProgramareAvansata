@@ -1,5 +1,6 @@
 package gov.Lab5.command;
 
+import gov.Lab5.exception.InvalidResourceException;
 import gov.Lab5.model.Resource;
 import gov.Lab5.util.SetCoverSolver;
 
@@ -7,7 +8,7 @@ import java.util.*;
 
 public class TestPerformanceCommand implements Command {
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws InvalidResourceException {
         System.out.println("Simulating 10,000 resources for performance benchmarking...");
         List<Resource> fakeData = new ArrayList<>();
         Set<String> allTargetConcepts = Set.of("Java", "Algorithms", "AI", "Cloud", "Security", "OOP");

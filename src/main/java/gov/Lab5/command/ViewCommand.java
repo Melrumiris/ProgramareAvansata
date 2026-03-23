@@ -1,5 +1,6 @@
 package gov.Lab5.command;
 
+import gov.Lab5.exception.InvalidResourceException;
 import gov.Lab5.model.Resource;
 import gov.Lab5.repository.Repository;
 
@@ -12,7 +13,7 @@ public class ViewCommand implements Command {
     public ViewCommand(Repository repo) { this.repository = repo; }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws InvalidResourceException {
         if (args.length < 1) {
             System.out.println("Usage: view <id>");
             return;

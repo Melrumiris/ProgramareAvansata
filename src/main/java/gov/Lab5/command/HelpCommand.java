@@ -1,5 +1,7 @@
 package gov.Lab5.command;
 
+import gov.Lab5.exception.InvalidResourceException;
+
 import java.util.Map;
 
 public class HelpCommand implements Command {
@@ -10,7 +12,7 @@ public class HelpCommand implements Command {
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws InvalidResourceException {
         if (args.length == 0) {
             System.out.println("Available commands:");
             commands.keySet().stream().sorted().forEach(name -> {

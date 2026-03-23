@@ -17,10 +17,14 @@ public class Repository {
 
     public Repository(String fileName) {
         this.filePath = Paths.get(fileName);
-        load();
+        try {
+            load();
+        }catch (InvalidResourceException e){
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void load() {
+    private void load() throws InvalidResourceException {
         if (!Files.exists(filePath)) return;
         try {
             String content = Files.readString(filePath);
@@ -45,7 +49,7 @@ public class Repository {
         }
     }
 
-    public void save() {
+    public void save() throws InvalidResourceException {
         try {
             JSONArray array = new JSONArray();
             for (Resource res : resources.values()) {
@@ -65,7 +69,7 @@ public class Repository {
         }
     }
 
-    public void add(Resource resource) {
+    public void add(Resource resource) throws InvalidResourceException{
         if (resources.containsKey(resource.id())) {
             throw new InvalidResourceException("Conflict: Resource ID '" + resource.id() + "' already exists.");
         }
