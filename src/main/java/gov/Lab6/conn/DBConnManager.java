@@ -1,5 +1,7 @@
 package gov.Lab6.conn;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.postgresql.core.JdbcCallParseInfo;
 
 import java.sql.Connection;
@@ -17,11 +19,22 @@ public class DBConnManager {
     private static final String USER = "postgres";
     private static final String PASSWORD = "password";
 
+    private final HikariDataSource ds;
     private Connection conn;
 
     private DBConnManager() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(URL);
+        config.setUsername(USER);
+        config.setPassword(PASSWORD);
+
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+        ds = new HikariDataSource(config);
         try {
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            conn = ds.getConnection();
         } catch (SQLException e) {
             System.err.println("Database connection failed:" + e.getMessage());
             e.printStackTrace();

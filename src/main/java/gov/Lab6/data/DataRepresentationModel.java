@@ -3,7 +3,11 @@ package gov.Lab6.data;
 import gov.Lab6.data.builder.DataBuilder;
 
 public abstract class DataRepresentationModel {
-    protected int id;
+    protected final int id;
+
+    protected DataRepresentationModel(int id) {
+        this.id = id;
+    }
 
     public int getID() {
         return id;
