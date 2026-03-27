@@ -12,7 +12,7 @@ public class MovieBuilder extends DataBuilder<MovieData> {
     private String title;
     private Date releaseDate;
     private Time duration;
-    private byte score;
+    private byte score = -1;
     private GenreData genre;
 
     public Date getReleaseDate() {
@@ -62,6 +62,16 @@ public class MovieBuilder extends DataBuilder<MovieData> {
         this.title = title;
         return this;
     }
+
+    public MovieBuilder(MovieData data) {
+        setID(data.getID());
+        title = data.getTitle();
+        releaseDate = getReleaseDate();
+        duration = data.getDuration();
+        score = data.getScore();
+        genre = data.getGenre();
+    }
+    public MovieBuilder(){}
 
     @Override
     public MovieData build() throws NullDataException {

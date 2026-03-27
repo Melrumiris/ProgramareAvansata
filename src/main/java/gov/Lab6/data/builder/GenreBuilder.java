@@ -20,6 +20,12 @@ public class GenreBuilder extends DataBuilder<GenreData> {
         return this;
     }
 
+    public GenreBuilder(GenreData data) {
+        setID(data.getID());
+        name = data.getName();
+    }
+    public GenreBuilder(){}
+
     @Override
     public GenreData build() throws NullDataException {
         if (getID() == 0) throw new NullDataException("ID must be set");

@@ -21,6 +21,12 @@ public class ActorBuilder extends DataBuilder<ActorData> {
         return this;
     }
 
+    public ActorBuilder(ActorData data) {
+        setID(data.getID());
+        name = data.getName();
+    }
+    public ActorBuilder(){}
+
     @Override
     public ActorData build() throws NullDataException {
         if (getID() == 0) throw new NullDataException("ID must be set");

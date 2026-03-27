@@ -38,6 +38,14 @@ public class CharacterBuilder extends DataBuilder<CharacterData> {
         return this;
     }
 
+    public CharacterBuilder(CharacterData data) {
+        setID(data.getID());
+        name = data.getName();
+        actor = data.getActor();
+        movie = data.getMovie();
+    }
+    public CharacterBuilder(){}
+
     @Override
     public CharacterData build() throws NullDataException {
         if (getID() == 0) throw new NullDataException("ID must be set");
