@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *   <li><b>Disconnected</b>:   {A-B-C-A}  {D-E}  (two separate components)</li>
  * </ul>
  */
-public class Test {
+public class Lab6Test {
 
     // -----------------------------------------------------------------------
     // Helpers

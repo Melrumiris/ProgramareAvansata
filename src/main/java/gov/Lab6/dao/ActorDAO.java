@@ -83,7 +83,6 @@ public class ActorDAO implements DAO<ActorData> {
             stmt.setString(1, item.getName());
             stmt.setInt(2, item.getId());
             stmt.executeUpdate();
-            manager.commit();
         }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
@@ -101,8 +100,7 @@ public class ActorDAO implements DAO<ActorData> {
             stmt.setInt(1, data.getId());
             stmt.setString(2, data.getName());
             stmt.executeUpdate();
-            manager.commit();
-        }catch (SQLException e){
+                    }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
         } catch (NullDataException e) {

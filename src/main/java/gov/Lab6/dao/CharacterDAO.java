@@ -91,8 +91,7 @@ public class CharacterDAO implements DAO<CharacterData> {
             stmt.setInt(3, item.getActor().getId());
             stmt.setInt(4, item.getMovie().getId());
             stmt.executeUpdate();
-            manager.commit();
-        }catch (SQLException e){
+                    }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
         }
@@ -111,8 +110,7 @@ public class CharacterDAO implements DAO<CharacterData> {
             stmt.setInt(3, data.getMovie().getId());
             stmt.setString(4, data.getName());
             stmt.executeUpdate();
-            manager.commit();
-        }catch (SQLException e){
+                    }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
         } catch (NullDataException e) {

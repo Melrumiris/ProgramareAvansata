@@ -8,7 +8,7 @@ public class GenreData extends DataRepresentationModel {
     public String getName() {
         return name;
     }
-
+    
     public GenreData(GenreBuilder builder){
         super(builder.getID());
         name = builder.getName();

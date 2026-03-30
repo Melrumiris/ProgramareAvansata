@@ -64,7 +64,7 @@ public class GenreDAO implements DAO<GenreData> {
             var stmt = manager.prepareStatement("DELETE FROM genres WHERE id = ?");
             stmt.setInt(1, item.getId());
             stmt.executeUpdate();
-            manager.commit();
+
         }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
@@ -80,7 +80,7 @@ public class GenreDAO implements DAO<GenreData> {
             stmt.setString(1, item.getName());
             stmt.setInt(2, item.getId());
             stmt.executeUpdate();
-            manager.commit();
+
         }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
@@ -98,7 +98,7 @@ public class GenreDAO implements DAO<GenreData> {
             stmt.setInt(1, data.getId());
             stmt.setString(2, data.getName());
             stmt.executeUpdate();
-            manager.commit();
+
         }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();

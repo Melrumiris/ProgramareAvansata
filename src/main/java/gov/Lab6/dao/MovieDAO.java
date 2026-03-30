@@ -44,6 +44,33 @@ public class MovieDAO implements DAO<MovieData> {
         return Optional.empty();
     }
 
+    public List<MovieData> getAll() {
+        Connection manager = DBConnManager.getInstance().getConnection();
+        MovieBuilder builder = new MovieBuilder();
+        List<MovieData> result = new ArrayList<>();
+        try {
+            var stmt = manager.prepareStatement("SELECT * FROM movies JOIN genres ON movies.genre_id = genres.id");
+            var rs = stmt.executeQuery();
+            while (rs.next()) {
+                builder.setID(rs.getInt("id"));
+                builder.setTitle(rs.getString("title"));
+                builder.setReleaseDate(rs.getDate("release_date"));
+                builder.setDuration(rs.getTime("duration"));
+                builder.setScore(rs.getInt("score"));
+                builder.setGenre(new GenreBuilder().setID(rs.getInt("genre_id")).setName(rs.getString("name")).build());
+                result.add(builder.build());
+            }
+            return result;
+        } catch (SQLException e){
+            System.err.println("Failed to execute query:" + e.getMessage());
+            e.printStackTrace();
+        } catch (IllegalDataException e) {
+            System.err.println("Failed to build data object:" + e.getMessage());
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     public List<MovieData> getByName(String name) {
         Connection manager = DBConnManager.getInstance().getConnection();
         MovieBuilder builder = new MovieBuilder();
@@ -102,7 +129,7 @@ public class MovieDAO implements DAO<MovieData> {
     public DAO<MovieData> remove(MovieData item) {
         Connection manager = DBConnManager.getInstance().getConnection();
         try {
-            var stmt = manager.prepareStatement("DELETE FROM actors WHERE id = ?");
+            var stmt = manager.prepareStatement("DELETE FROM movies WHERE id = ?");
             stmt.setInt(1, item.getId());
             stmt.executeUpdate();
         } catch (SQLException e){
@@ -124,8 +151,7 @@ public class MovieDAO implements DAO<MovieData> {
             stmt.setInt(5, item.getGenre().getId());
             stmt.setInt(6, item.getId());
             stmt.executeUpdate();
-            manager.commit();
-        }catch (SQLException e){
+                    }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
         }
@@ -136,7 +162,11 @@ public class MovieDAO implements DAO<MovieData> {
     public DAO<MovieData> add(DataBuilder<MovieData> builder) {
         Connection manager = DBConnManager.getInstance().getConnection();
         try {
-            builder.setID(manager.prepareStatement("SELECT NEXTVAL('movies_id_seq')::regclass").executeQuery().getInt(1));
+            System.out.println("Generated ID not set");
+            var serializer = manager.prepareStatement("SELECT NEXTVAL('movies_id_seq')::regclass").executeQuery();
+            serializer.next();
+            builder.setID(serializer.getInt(1));
+            System.out.println("Generated ID: " + builder.getID());
             MovieData data = builder.build();
             var stmt = manager.prepareStatement("INSERT INTO movies (id, title, release_date, duration, score, genre_id) VALUES (?, ?, ?, ?, ?, ?)");
             stmt.setInt(1, data.getId());
@@ -146,7 +176,6 @@ public class MovieDAO implements DAO<MovieData> {
             stmt.setInt(5, data.getScore());
             stmt.setInt(6, data.getGenre().getId());
             stmt.executeUpdate();
-            manager.commit();
         }catch (SQLException e){
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();

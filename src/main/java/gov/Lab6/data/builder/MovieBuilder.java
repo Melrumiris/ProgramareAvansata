@@ -1,5 +1,7 @@
 package gov.Lab6.data.builder;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import gov.Lab6.dao.GenreDAO;
 import gov.Lab6.data.GenreData;
 import gov.Lab6.data.MovieData;
 import gov.Lab6.exception.IllegalDataException;
@@ -56,6 +58,12 @@ public class MovieBuilder extends DataBuilder<MovieData> {
     }
     public MovieBuilder setGenre(GenreData genre) {
         this.genre = genre;
+        return this;
+    }
+    @JsonProperty("genre")
+    public MovieBuilder setGenreByName(String name) {
+        GenreDAO dao = new GenreDAO();
+        this.genre = dao.getByName(name).orElse(null);
         return this;
     }
     public MovieBuilder setTitle(String title) {
