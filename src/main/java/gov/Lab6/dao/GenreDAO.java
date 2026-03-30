@@ -4,7 +4,7 @@ import gov.Lab6.conn.DBConnManager;
 import gov.Lab6.data.GenreData;
 import gov.Lab6.data.builder.DataBuilder;
 import gov.Lab6.data.builder.GenreBuilder;
-import gov.Lab6.exceptions.NullDataException;
+import gov.Lab6.exception.NullDataException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -62,7 +62,7 @@ public class GenreDAO implements DAO<GenreData> {
         Connection manager = DBConnManager.getInstance().getConnection();
         try {
             var stmt = manager.prepareStatement("DELETE FROM genres WHERE id = ?");
-            stmt.setInt(1, item.getID());
+            stmt.setInt(1, item.getId());
             stmt.executeUpdate();
             manager.commit();
         }catch (SQLException e){
@@ -78,7 +78,7 @@ public class GenreDAO implements DAO<GenreData> {
         try {
             var stmt = manager.prepareStatement("UPDATE genres SET name = ? WHERE id = ?");
             stmt.setString(1, item.getName());
-            stmt.setInt(2, item.getID());
+            stmt.setInt(2, item.getId());
             stmt.executeUpdate();
             manager.commit();
         }catch (SQLException e){
@@ -95,7 +95,7 @@ public class GenreDAO implements DAO<GenreData> {
             builder.setID(manager.prepareStatement("SELECT NEXTVAL('genres_id_seq')::regclass").executeQuery().getInt(1));
             GenreData data = builder.build();
             var stmt = manager.prepareStatement("INSERT INTO genres (id, name) VALUES (?, ?)");
-            stmt.setInt(1, data.getID());
+            stmt.setInt(1, data.getId());
             stmt.setString(2, data.getName());
             stmt.executeUpdate();
             manager.commit();

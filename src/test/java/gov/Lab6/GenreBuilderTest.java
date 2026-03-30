@@ -2,7 +2,7 @@ package gov.Lab6;
 
 import gov.Lab6.data.GenreData;
 import gov.Lab6.data.builder.GenreBuilder;
-import gov.Lab6.exceptions.NullDataException;
+import gov.Lab6.exception.NullDataException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +16,7 @@ class GenreBuilderTest {
                 .setName("Sci-Fi")
                 .build();
 
-        assertEquals(7, genre.getID());
+        assertEquals(7, genre.getId());
         assertEquals("Sci-Fi", genre.getName());
     }
 

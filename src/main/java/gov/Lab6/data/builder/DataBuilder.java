@@ -1,7 +1,7 @@
 package gov.Lab6.data.builder;
 
 import gov.Lab6.data.DataRepresentationModel;
-import gov.Lab6.exceptions.NullDataException;
+import gov.Lab6.exception.NullDataException;
 
 public abstract class DataBuilder<T extends DataRepresentationModel> {
     private int id;

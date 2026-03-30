@@ -2,8 +2,8 @@ package gov.Lab6.data.builder;
 
 import gov.Lab6.data.GenreData;
 import gov.Lab6.data.MovieData;
-import gov.Lab6.exceptions.IllegalDataException;
-import gov.Lab6.exceptions.NullDataException;
+import gov.Lab6.exception.IllegalDataException;
+import gov.Lab6.exception.NullDataException;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -64,7 +64,7 @@ public class MovieBuilder extends DataBuilder<MovieData> {
     }
 
     public MovieBuilder(MovieData data) {
-        setID(data.getID());
+        setID(data.getId());
         title = data.getTitle();
         releaseDate = getReleaseDate();
         duration = data.getDuration();

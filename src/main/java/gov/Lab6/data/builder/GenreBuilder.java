@@ -1,7 +1,7 @@
 package gov.Lab6.data.builder;
 
 import gov.Lab6.data.GenreData;
-import gov.Lab6.exceptions.NullDataException;
+import gov.Lab6.exception.NullDataException;
 
 public class GenreBuilder extends DataBuilder<GenreData> {
     private String name;
@@ -21,7 +21,7 @@ public class GenreBuilder extends DataBuilder<GenreData> {
     }
 
     public GenreBuilder(GenreData data) {
-        setID(data.getID());
+        setID(data.getId());
         name = data.getName();
     }
     public GenreBuilder(){}

@@ -70,7 +70,7 @@ public class Graph {
                     return false;
             for (Road edge : adjacencyList.get(first).values()) {
                 switch (edges.get(edge)) {
-                    case null -> edges.put(edge, 1);
+                    case 0 -> edges.put(edge, 1);
                     case 1 -> edges.put(edge, 2);
                     default -> {
                         return false;

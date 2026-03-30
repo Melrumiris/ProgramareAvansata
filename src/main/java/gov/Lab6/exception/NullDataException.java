@@ -1,4 +1,4 @@
-package gov.Lab6.exceptions;
+package gov.Lab6.exception;
 
 public class NullDataException extends IllegalDataException {
     public NullDataException(String message) {

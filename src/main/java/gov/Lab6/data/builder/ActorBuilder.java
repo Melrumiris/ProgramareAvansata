@@ -1,8 +1,7 @@
 package gov.Lab6.data.builder;
 
 import gov.Lab6.data.ActorData;
-import gov.Lab6.data.GenreData;
-import gov.Lab6.exceptions.NullDataException;
+import gov.Lab6.exception.NullDataException;
 
 public class ActorBuilder extends DataBuilder<ActorData> {
     private String name;
@@ -22,7 +21,7 @@ public class ActorBuilder extends DataBuilder<ActorData> {
     }
 
     public ActorBuilder(ActorData data) {
-        setID(data.getID());
+        setID(data.getId());
         name = data.getName();
     }
     public ActorBuilder(){}

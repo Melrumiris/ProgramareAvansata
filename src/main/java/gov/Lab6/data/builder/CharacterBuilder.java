@@ -3,9 +3,7 @@ package gov.Lab6.data.builder;
 import gov.Lab6.data.ActorData;
 import gov.Lab6.data.CharacterData;
 import gov.Lab6.data.MovieData;
-import gov.Lab6.exceptions.NullDataException;
-
-import javax.xml.crypto.Data;
+import gov.Lab6.exception.NullDataException;
 
 public class CharacterBuilder extends DataBuilder<CharacterData> {
     private String name;
@@ -39,7 +37,7 @@ public class CharacterBuilder extends DataBuilder<CharacterData> {
     }
 
     public CharacterBuilder(CharacterData data) {
-        setID(data.getID());
+        setID(data.getId());
         name = data.getName();
         actor = data.getActor();
         movie = data.getMovie();

@@ -2,7 +2,6 @@ package gov.Lab6.dao;
 
 import gov.Lab6.data.DataRepresentationModel;
 import gov.Lab6.data.builder.DataBuilder;
-import gov.Lab6.exceptions.NullDataException;
 
 import java.util.Optional;
 

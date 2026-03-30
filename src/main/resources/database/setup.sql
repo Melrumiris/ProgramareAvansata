@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS movies;
 DROP TABLE IF EXISTS actors;
 DROP TABLE IF EXISTS genres;
+DROP VIEW IF EXISTS movie_report_view;
 
 CREATE TABLE genres (
         id SERIAL PRIMARY KEY,
@@ -37,3 +38,15 @@ CREATE TABLE characters (
         actor_id INT REFERENCES actors(id),
         name VARCHAR(255) NOT NULL
 );
+
+-- Expose a reporting view that joins movies with their genres
+CREATE OR REPLACE VIEW movie_report_view AS
+SELECT m.id,
+       m.title,
+       m.release_date,
+       m.duration,
+       m.score,
+       m.genre_id,
+       g.name AS genre_name
+FROM movies m
+JOIN genres g ON g.id = m.genre_id;
