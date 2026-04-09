@@ -1,0 +1,1 @@
+tagSearchIndex = [{"l":"Algorithms","h":"class gov.Lab3.NetworkAnalyzer","d":"Section","u":"gov/Lab3/NetworkAnalyzer.html#algorithms-heading"},{"l":"Disconnected graphs","h":"class gov.Lab3.NetworkAnalyzer","d":"Section","u":"gov/Lab3/NetworkAnalyzer.html#disconnected-graphs-heading"},{"l":"Serialized Form","h":"","u":"serialized-form.html"}];updateSearchResults();
