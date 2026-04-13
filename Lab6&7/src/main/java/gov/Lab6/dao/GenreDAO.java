@@ -92,14 +92,15 @@ public class GenreDAO implements DAO<GenreData> {
     public GenreDAO add(DataBuilder<GenreData> builder) {
         Connection manager = DBConnManager.getInstance().getConnection();
         try {
-            builder.setID(manager.prepareStatement("SELECT NEXTVAL('genres_id_seq')::regclass").executeQuery().getInt(1));
+            var seqRs = manager.prepareStatement("SELECT NEXTVAL('genres_id_seq')").executeQuery();
+            seqRs.next();
+            builder.setID(seqRs.getInt(1));
             GenreData data = builder.build();
             var stmt = manager.prepareStatement("INSERT INTO genres (id, name) VALUES (?, ?)");
             stmt.setInt(1, data.getId());
             stmt.setString(2, data.getName());
             stmt.executeUpdate();
-
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
         } catch (NullDataException e) {

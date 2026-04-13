@@ -50,7 +50,14 @@ public class DBConnManager {
             e.printStackTrace();
         }
     }
-    public Connection getConnection(){
+    public Connection getConnection() {
+        try {
+            if (conn == null || conn.isClosed()) {
+                conn = ds.getConnection();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Database connection unavailable: " + e.getMessage(), e);
+        }
         return conn;
     }
 }

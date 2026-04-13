@@ -162,11 +162,9 @@ public class MovieDAO implements DAO<MovieData> {
     public DAO<MovieData> add(DataBuilder<MovieData> builder) {
         Connection manager = DBConnManager.getInstance().getConnection();
         try {
-            System.out.println("Generated ID not set");
-            var serializer = manager.prepareStatement("SELECT NEXTVAL('movies_id_seq')::regclass").executeQuery();
-            serializer.next();
-            builder.setID(serializer.getInt(1));
-            System.out.println("Generated ID: " + builder.getID());
+            var seqRs = manager.prepareStatement("SELECT NEXTVAL('movies_id_seq')").executeQuery();
+            seqRs.next();
+            builder.setID(seqRs.getInt(1));
             MovieData data = builder.build();
             var stmt = manager.prepareStatement("INSERT INTO movies (id, title, release_date, duration, score, genre_id) VALUES (?, ?, ?, ?, ?, ?)");
             stmt.setInt(1, data.getId());
@@ -176,7 +174,7 @@ public class MovieDAO implements DAO<MovieData> {
             stmt.setInt(5, data.getScore());
             stmt.setInt(6, data.getGenre().getId());
             stmt.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
         } catch (NullDataException e) {

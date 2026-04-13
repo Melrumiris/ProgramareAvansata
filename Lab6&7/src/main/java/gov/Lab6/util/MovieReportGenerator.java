@@ -10,7 +10,6 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,8 @@ public final class MovieReportGenerator {
     public static File generate(List<MovieData> movies) {
         try {
             Configuration cfg = new Configuration(Configuration.VERSION_2_3_32);
-            cfg.setDirectoryForTemplateLoading(Paths.get("src/main/resources/templates").toFile());
+            cfg.setClassLoaderForTemplateLoading(
+                    Thread.currentThread().getContextClassLoader(), "templates");
             cfg.setDefaultEncoding("UTF-8");
             cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 

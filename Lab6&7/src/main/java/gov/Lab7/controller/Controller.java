@@ -2,8 +2,10 @@ package gov.Lab7.controller;
 
 import gov.Lab6.dao.MovieDAO;
 import gov.Lab6.data.MovieData;
+import gov.Lab6.data.MovieListData;
 import gov.Lab6.data.builder.MovieBuilder;
 import gov.Lab6.exception.NullDataException;
+import gov.Lab6.util.MoviePartitioner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +54,11 @@ public class Controller {
     @DeleteMapping("/{id}")
     public void deleteMovie(@PathVariable Integer id) {
         movies.remove(movies.get(id).orElseThrow(() -> new IllegalArgumentException("Movie not found with id: " + id)));
+    }
+
+    @GetMapping("/partition")
+    public List<MovieListData> partitionMovies() {
+        return new MoviePartitioner().partition(movies.getAll());
     }
 
 }

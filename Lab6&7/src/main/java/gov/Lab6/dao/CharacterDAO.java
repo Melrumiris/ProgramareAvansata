@@ -13,8 +13,12 @@ import gov.Lab6.exception.NullDataException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class CharacterDAO implements DAO<CharacterData> {
 
@@ -102,7 +106,9 @@ public class CharacterDAO implements DAO<CharacterData> {
     public DAO<CharacterData> add(DataBuilder<CharacterData> builder) {
         Connection manager = DBConnManager.getInstance().getConnection();
         try {
-            builder.setID(manager.prepareStatement("SELECT NEXTVAL('characters_id_seq')::regclass").executeQuery().getInt(1));
+            var seqRs = manager.prepareStatement("SELECT NEXTVAL('characters_id_seq')").executeQuery();
+            seqRs.next();
+            builder.setID(seqRs.getInt(1));
             CharacterData data = builder.build();
             var stmt = manager.prepareStatement("INSERT INTO characters (id, actor_id, movie_id, name) VALUES (?, ?, ?, ?)");
             stmt.setInt(1, data.getId());
@@ -110,7 +116,7 @@ public class CharacterDAO implements DAO<CharacterData> {
             stmt.setInt(3, data.getMovie().getId());
             stmt.setString(4, data.getName());
             stmt.executeUpdate();
-                    }catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("Failed to execute query:" + e.getMessage());
             e.printStackTrace();
         } catch (NullDataException e) {
@@ -118,5 +124,23 @@ public class CharacterDAO implements DAO<CharacterData> {
             e.printStackTrace();
         }
         return this;
+    }
+
+    public Map<Integer, Set<Integer>> getMovieActorSets() {
+        Connection conn = DBConnManager.getInstance().getConnection();
+        Map<Integer, Set<Integer>> result = new HashMap<>();
+        try {
+            var rs = conn.prepareStatement("SELECT movie_id, actor_id FROM characters WHERE actor_id IS NOT NULL")
+                         .executeQuery();
+            while (rs.next()) {
+                int movieId = rs.getInt("movie_id");
+                int actorId = rs.getInt("actor_id");
+                result.computeIfAbsent(movieId, k -> new HashSet<>()).add(actorId);
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to execute query: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
     }
 }

@@ -31,8 +31,8 @@
                 <td>${movie.id}</td>
                 <td>${movie.title}</td>
                 <td>${movie.genre.name}</td>
-                <td>${movie.releaseDate?string('yyyy-MM-dd')!'-'}</td>
-                <td>${movie.duration?string('HH:mm:ss')!'-'}</td>
+                <td>${(movie.releaseDate?string('yyyy-MM-dd'))!'-'}</td>
+                <td>${(movie.duration?string('HH:mm:ss'))!'-'}</td>
                 <td>${movie.score?c}</td>
             </tr>
         </#list>

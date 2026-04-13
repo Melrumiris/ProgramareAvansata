@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f30dbab7-a797-4430-88cb-2cb15f892fb5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/CSVs/credits.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/CSVs/movies_metadata.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movies-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/movies-report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gov/Lab6/conn/DBConnManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gov/Lab6/conn/DBConnManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gov/Lab6/dao/ActorDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gov/Lab6/dao/ActorDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gov/Lab6/dao/CharacterDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gov/Lab6/dao/CharacterDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gov/Lab6/dao/GenreDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gov/Lab6/dao/GenreDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gov/Lab6/dao/MovieDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gov/Lab6/dao/MovieDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gov/Lab6/util/MovieDataImporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gov/Lab6/util/MovieDataImporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gov/Lab6/util/MoviePartitioner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gov/Lab6/util/MoviePartitioner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gov/Lab6/util/MovieReportGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gov/Lab6/util/MovieReportGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/movies-report.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/movies-report.ftl" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/home/melrumiris/IdeaProjects/AdvancedProgramming/Lab6&amp;7" value="3CafHRzJVoGpDx50PBRnvowU1lX" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Melrumiris&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Melrumiris/ProgramareAvansata.git&quot;,
+    &quot;accountId&quot;: &quot;fe7834b3-3b52-46b3-9dd4-3a86785e83f3&quot;
+  }
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3CafHRzJVoGpDx50PBRnvowU1lX" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+    <option name="sortByType" value="true" />
+    <option name="sortKey" value="BY_TYPE" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MovieDataImportMain.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MovieReportMain.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Rebasing master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/melrumiris/IdeaProjects/AdvancedProgramming/Lab6&amp;7/src/main/resources/CSVs&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/CSVs" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.MovieReportMain">
+    <configuration name="MovieDataImportMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gov.Lab6.MovieDataImportMain" />
+      <module name="Lab6-7" />
+      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/src/main/resources/CSVs/movies_metadata.csv $PROJECT_DIR$/src/main/resources/CSVs/credits.csv" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="gov.Lab6.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MovieDataImportMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gov.Lab6.MovieDataImportMain" />
+      <module name="Lab6-7" />
+      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/src/main/resources/CSVs/movies_metadata.csv $PROJECT_DIR$/src/main/resources/CSVs/credits.csv" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="gov.Lab6.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MovieReportMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gov.Lab6.MovieReportMain" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="gov.Lab6.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MovieReportMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gov.Lab6.MovieReportMain" />
+      <module name="Lab6-7" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="gov.Lab6.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Lab6-7" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Lab6-7" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Lab7Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="Lab6-7" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="gov.Lab7.Lab7Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Lab7Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="Lab6-7" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="gov.Lab7.Lab7Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.MovieDataImportMain" />
+      <item itemvalue="Application.MovieReportMain" />
+      <item itemvalue="Spring Boot.Lab7Application" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MovieReportMain" />
+        <item itemvalue="Application.MovieDataImportMain" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f30dbab7-a797-4430-88cb-2cb15f892fb5" name="Changes" comment="" />
+      <created>1776628513697</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1776628513697</updated>
+      <workItem from="1776628514703" duration="3222000" />
+      <workItem from="1776661812699" duration="545000" />
+      <workItem from="1776662380896" duration="1880000" />
+      <workItem from="1776667618313" duration="170000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
