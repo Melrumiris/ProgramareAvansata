@@ -1,24 +1,16 @@
 package gov.Lab6.dao;
 
 import gov.Lab6.conn.DBConnManager;
-import gov.Lab6.data.ActorData;
 import gov.Lab6.data.CharacterData;
 import gov.Lab6.data.builder.ActorBuilder;
 import gov.Lab6.data.builder.CharacterBuilder;
 import gov.Lab6.data.builder.DataBuilder;
-import gov.Lab6.data.builder.MovieBuilder;
 import gov.Lab6.exception.IllegalDataException;
 import gov.Lab6.exception.NullDataException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class CharacterDAO implements DAO<CharacterData> {
 
@@ -142,5 +134,29 @@ public class CharacterDAO implements DAO<CharacterData> {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public List<int[]> getConflictPairs(Map<Integer, Integer> movieIdToIndex) {
+        Connection conn = DBConnManager.getInstance().getConnection();
+        List<int[]> pairs = new ArrayList<>();
+        try {
+            var rs = conn.prepareStatement(
+                    "SELECT DISTINCT c1.movie_id, c2.movie_id " +
+                    "FROM characters c1 " +
+                    "JOIN characters c2 ON c1.actor_id = c2.actor_id AND c1.movie_id < c2.movie_id " +
+                    "WHERE c1.actor_id IS NOT NULL"
+            ).executeQuery();
+            while (rs.next()) {
+                Integer a = movieIdToIndex.get(rs.getInt(1));
+                Integer b = movieIdToIndex.get(rs.getInt(2));
+                if (a != null && b != null) {
+                    pairs.add(new int[]{a, b});
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to get conflict pairs: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return pairs;
     }
 }

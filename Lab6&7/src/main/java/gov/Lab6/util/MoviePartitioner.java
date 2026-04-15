@@ -24,7 +24,7 @@ public class MoviePartitioner {
 
     private final CharacterDAO characterDAO = new CharacterDAO();
 
-    public List<MovieListData> partition(List<MovieData> movies) {
+    public List<MovieListData> partition(List<MovieData> movies)  {
         if (movies.isEmpty()) return List.of();
 
         Map<Integer, MovieData> byId = new HashMap<>();

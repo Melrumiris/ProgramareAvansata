@@ -74,7 +74,7 @@ public class MovieBuilder extends DataBuilder<MovieData> {
     public MovieBuilder(MovieData data) {
         setID(data.getId());
         title = data.getTitle();
-        releaseDate = getReleaseDate();
+        releaseDate = data.getReleaseDate();
         duration = data.getDuration();
         score = data.getScore();
         genre = data.getGenre();

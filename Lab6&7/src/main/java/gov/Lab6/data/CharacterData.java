@@ -1,6 +1,5 @@
 package gov.Lab6.data;
 
-import gov.Lab6.data.builder.ActorBuilder;
 import gov.Lab6.data.builder.CharacterBuilder;
 
 public class CharacterData extends DataRepresentationModel {
