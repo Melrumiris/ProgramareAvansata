@@ -1,9 +1,17 @@
 package org.example;
 
-import javax.swing.*;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-public class Main {
+public class Main extends Application {
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MazeApp().setVisible(true));
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        MazeApp.setup(primaryStage);
+        primaryStage.show();
     }
 }

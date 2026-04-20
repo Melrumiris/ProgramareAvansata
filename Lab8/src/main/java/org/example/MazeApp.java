@@ -1,27 +1,34 @@
 package org.example;
 
-import javax.swing.*;
-import java.awt.*;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
-public class MazeApp extends JFrame {
+public class MazeApp {
 
-    public MazeApp() {
-        super("Maze Generator");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public static void setup(Stage stage) {
+        stage.setTitle("Maze Generator");
 
         CanvasPanel canvas = new CanvasPanel();
-        ConfigPanel configPanel = new ConfigPanel(canvas, this);
+        ConfigPanel configPanel = new ConfigPanel(canvas, stage);
         ControlPanel controlPanel = new ControlPanel(canvas);
 
-        JScrollPane scrollPane = new JScrollPane(canvas);
-        scrollPane.setPreferredSize(new Dimension(600, 500));
+        StackPane canvasWrapper = new StackPane(canvas);
+        StackPane.setAlignment(canvas, Pos.CENTER);
 
-        setLayout(new BorderLayout());
-        add(configPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        add(controlPanel, BorderLayout.SOUTH);
+        ScrollPane scrollPane = new ScrollPane(canvasWrapper);
+        scrollPane.setPrefSize(600, 500);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
 
-        pack();
-        setLocationRelativeTo(null);
+        BorderPane root = new BorderPane();
+        root.setTop(configPanel);
+        root.setCenter(scrollPane);
+        root.setBottom(controlPanel);
+
+        stage.setScene(new Scene(root));
     }
 }

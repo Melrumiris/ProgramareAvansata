@@ -1,37 +1,37 @@
 package org.example;
 
-import javax.swing.*;
-import java.awt.*;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
-public class ConfigPanel extends JPanel {
+public class ConfigPanel extends HBox {
 
-    private final JSpinner rowsSpinner;
-    private final JSpinner colsSpinner;
+    private final Spinner<Integer> rowsSpinner;
+    private final Spinner<Integer> colsSpinner;
 
-    public ConfigPanel(CanvasPanel canvas, JFrame parentFrame) {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 8));
+    public ConfigPanel(CanvasPanel canvas, Stage stage) {
+        super(10);
+        setPadding(new Insets(8));
 
-        rowsSpinner = new JSpinner(new SpinnerNumberModel(10, 2, 50, 1));
-        colsSpinner = new JSpinner(new SpinnerNumberModel(10, 2, 50, 1));
+        rowsSpinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 50, 10));
+        colsSpinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 50, 10));
+        rowsSpinner.setPrefWidth(70);
+        colsSpinner.setPrefWidth(70);
 
-        add(new JLabel("Rows:"));
-        add(rowsSpinner);
-        add(new JLabel("Cols:"));
-        add(colsSpinner);
-
-        JButton drawButton = new JButton("Draw Grid");
-        drawButton.addActionListener(e -> {
-            canvas.initGrid(getRows(), getCols());
-            parentFrame.pack();
+        Button drawButton = new Button("Draw Grid");
+        drawButton.setOnAction(e -> {
+            canvas.initGrid(rowsSpinner.getValue(), colsSpinner.getValue());
+            stage.sizeToScene();
         });
-        add(drawButton);
-    }
 
-    public int getRows() {
-        return (int) rowsSpinner.getValue();
-    }
-
-    public int getCols() {
-        return (int) colsSpinner.getValue();
+        getChildren().addAll(
+                new Label("Rows:"), rowsSpinner,
+                new Label("Cols:"), colsSpinner,
+                drawButton
+        );
     }
 }

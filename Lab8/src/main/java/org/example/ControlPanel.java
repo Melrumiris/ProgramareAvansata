@@ -1,24 +1,25 @@
 package org.example;
 
-import javax.swing.*;
-import java.awt.*;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 
-public class ControlPanel extends JPanel {
+public class ControlPanel extends HBox {
 
     public ControlPanel(CanvasPanel canvas) {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 8));
+        super(10);
+        setPadding(new Insets(8));
 
-        JButton createButton = new JButton("Create");
-        createButton.addActionListener(e -> canvas.generateMaze());
+        Button createButton = new Button("Create");
+        createButton.setOnAction(e -> canvas.generateMaze());
 
-        JButton resetButton = new JButton("Reset");
-        resetButton.addActionListener(e -> canvas.resetWalls());
+        Button resetButton = new Button("Reset");
+        resetButton.setOnAction(e -> canvas.resetWalls());
 
-        JButton exitButton = new JButton("Exit");
-        exitButton.addActionListener(e -> System.exit(0));
+        Button exitButton = new Button("Exit");
+        exitButton.setOnAction(e -> Platform.exit());
 
-        add(createButton);
-        add(resetButton);
-        add(exitButton);
+        getChildren().addAll(createButton, resetButton, exitButton);
     }
 }
