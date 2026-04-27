@@ -67,6 +67,18 @@ public class Cell implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cell other)) return false;
+        return row == other.row && col == other.col;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * row + col;
+    }
+
+    @Override
     public String toString() {
         return String.format("Cell(%d,%d)[T=%b R=%b B=%b L=%b]",
                 row, col, topWall, rightWall, bottomWall, leftWall);

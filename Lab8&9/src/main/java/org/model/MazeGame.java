@@ -21,14 +21,16 @@ public class MazeGame {
     // Construction
 
     public MazeGame(List<List<Cell>> grid, Cell bunnyStart, Cell exitCell, int numRobots) {
-        this.grid     = grid;
-        this.exitCell = exitCell;
+        this.grid      = grid;
+        this.exitCell  = exitCell;
         this.bunnyCell = bunnyStart;
 
-        // Place robots at distinct random cells (not on bunny start or exit)
-        List<Cell> pool = shuffledCells();
+        // Only spawn robots in cells reachable from the bunny's start
+        // (same connected component), excluding the start and exit cells.
+        List<Cell> pool = new ArrayList<>(bfsReachable(bunnyStart));
         pool.remove(bunnyCell);
         pool.remove(exitCell);
+        Collections.shuffle(pool);
 
         List<Robot> robots = new ArrayList<>();
         for (int i = 0; i < numRobots && !pool.isEmpty(); i++) {
@@ -102,12 +104,25 @@ public class MazeGame {
 
     // Helpers
 
-
-    private List<Cell> shuffledCells() {
-        List<Cell> list = new ArrayList<>();
-        for (List<Cell> row : grid) list.addAll(row);
-        Collections.shuffle(list);
-        return list;
+    /** BFS from start; returns all cells in the same connected component. */
+    private Set<Cell> bfsReachable(Cell start) {
+        Set<Cell> visited = new LinkedHashSet<>();
+        Queue<Cell> queue = new ArrayDeque<>();
+        queue.add(start);
+        visited.add(start);
+        int rows = grid.size(), cols = grid.get(0).size();
+        while (!queue.isEmpty()) {
+            Cell cur = queue.poll();
+            for (Wall w : Wall.values()) {
+                if (cur.hasWall(w)) continue;
+                int nr = cur.getRow() + w.rowDelta();
+                int nc = cur.getCol() + w.colDelta();
+                if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+                Cell neighbour = grid.get(nr).get(nc);
+                if (visited.add(neighbour)) queue.add(neighbour);
+            }
+        }
+        return visited;
     }
 }
 
