@@ -7,6 +7,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import org.model.Cell;
+import org.model.MazeData;
 import org.model.Wall;
 
 import javax.imageio.ImageIO;
@@ -16,10 +17,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class CanvasPanel extends Canvas {
+
+    public enum PickMode { NONE, START, END }
 
     private static final int    CELL_SIZE                = 40;
     private static final double WALL_REMOVAL_PROBABILITY = 0.3;
@@ -28,10 +32,38 @@ public class CanvasPanel extends Canvas {
     private List<List<Cell>> grid;
     private final Random random = new Random();
 
+    private Cell startCell = null;
+    private Cell endCell   = null;
+    private PickMode pickMode = PickMode.NONE;
+
+    private Consumer<Cell> onStartCellPicked;
+    private Consumer<Cell> onEndCellPicked;
+
     // --- Public API ---
 
     public CanvasPanel() {
         setOnMouseClicked(this::handleClick);
+    }
+
+    public void setPickMode(PickMode mode) { this.pickMode = mode; }
+    public PickMode getPickMode()          { return pickMode; }
+
+    public void setOnStartCellPicked(Consumer<Cell> cb) { this.onStartCellPicked = cb; }
+    public void setOnEndCellPicked(Consumer<Cell> cb)   { this.onEndCellPicked = cb; }
+
+    public Cell getStartCell() { return startCell; }
+    public Cell getEndCell()   { return endCell; }
+
+    public void setStartCell(int row, int col) {
+        if (!isValidCell(row, col)) return;
+        startCell = grid.get(row).get(col);
+        draw();
+    }
+
+    public void setEndCell(int row, int col) {
+        if (!isValidCell(row, col)) return;
+        endCell = grid.get(row).get(col);
+        draw();
     }
 
     public void initGrid(int rows, int cols) {
@@ -40,6 +72,10 @@ public class CanvasPanel extends Canvas {
                         .mapToObj(c -> new Cell(r, c))
                         .collect(Collectors.toCollection(ArrayList::new)))
                 .collect(Collectors.toCollection(ArrayList::new));
+
+        startCell = null;
+        endCell   = null;
+        pickMode  = PickMode.NONE;
 
         setWidth(cols  * CELL_SIZE);
         setHeight(rows * CELL_SIZE);
@@ -88,7 +124,6 @@ public class CanvasPanel extends Canvas {
         draw();
     }
 
-    /** Toggle a wall on/off; keeps the shared neighbour wall in sync. */
     public void toggleWall(int row, int col, Wall wall) {
         if (!isValidCell(row, col)) return;
 
@@ -116,6 +151,21 @@ public class CanvasPanel extends Canvas {
         int row = (int) (y / CELL_SIZE);
 
         if (!isValidCell(row, col)) return;
+
+        if (pickMode == PickMode.START) {
+            startCell = grid.get(row).get(col);
+            pickMode  = PickMode.NONE;
+            draw();
+            if (onStartCellPicked != null) onStartCellPicked.accept(startCell);
+            return;
+        }
+        if (pickMode == PickMode.END) {
+            endCell  = grid.get(row).get(col);
+            pickMode = PickMode.NONE;
+            draw();
+            if (onEndCellPicked != null) onEndCellPicked.accept(endCell);
+            return;
+        }
 
         double cellX = x - col * CELL_SIZE;
         double cellY = y - row * CELL_SIZE;
@@ -146,6 +196,12 @@ public class CanvasPanel extends Canvas {
     public int getRows() { return grid == null ? 0 : grid.size(); }
     public int getCols() { return grid == null ? 0 : grid.get(0).size(); }
 
+    public Cell getExitCell() {
+        if (grid == null) return null;
+        Set<Cell> outside = findOutsideCells();
+        return outside.isEmpty() ? null : outside.iterator().next();
+    }
+
     // --- Private helpers ---
 
     private boolean isValidCell(int row, int col) {
@@ -163,10 +219,16 @@ public class CanvasPanel extends Canvas {
     }
 
     private void drawCellBackgrounds(GraphicsContext gc) {
-        gc.setFill(Color.rgb(220, 220, 220));
         grid.stream().flatMap(List::stream).forEach(cell -> {
             double x = cell.getCol() * CELL_SIZE;
             double y = cell.getRow() * CELL_SIZE;
+            if (cell.equals(startCell)) {
+                gc.setFill(Color.rgb(100, 200, 100));
+            } else if (cell.equals(endCell)) {
+                gc.setFill(Color.rgb(200, 80, 80));
+            } else {
+                gc.setFill(Color.rgb(220, 220, 220));
+            }
             gc.fillRect(x, y, CELL_SIZE, CELL_SIZE);
         });
     }
@@ -195,46 +257,32 @@ public class CanvasPanel extends Canvas {
                 .collect(Collectors.toCollection(HashSet::new));
     }
 
-    /**
-     * Returns true if there is a path (through open walls) between at least
-     * two distinct outside cells, i.e. the maze has a valid entrance/exit pair.
-     */
     public boolean isValid() {
-        if (grid == null) return false;
+        if (grid == null || startCell == null || endCell == null) return false;
 
-        Set<Cell> outside = findOutsideCells();
-        if (outside.size() < 2) return false;
-
-        // BFS from the first outside cell; check if any other outside cell is reachable
-        Cell start = outside.iterator().next();
-
+        // BFS from startCell — maze is valid iff endCell is reachable
         Set<Cell> visited = new HashSet<>();
         java.util.Queue<Cell> queue = new java.util.ArrayDeque<>();
-        queue.add(start);
-        visited.add(start);
+        queue.add(startCell);
+        visited.add(startCell);
 
         while (!queue.isEmpty()) {
             Cell current = queue.poll();
+            if (current.equals(endCell)) return true;
             int r = current.getRow();
             int c = current.getCol();
-
             for (Wall wall : Wall.values()) {
-                if (current.hasWall(wall)) continue; // wall blocks passage
+                if (current.hasWall(wall)) continue;
                 int nr = r + wall.rowDelta();
                 int nc = c + wall.colDelta();
                 if (!isValidCell(nr, nc)) continue;
                 Cell neighbor = grid.get(nr).get(nc);
-                if (visited.contains(neighbor)) continue;
-                visited.add(neighbor);
-                queue.add(neighbor);
+                if (visited.add(neighbor)) queue.add(neighbor);
             }
         }
-
-        // Valid if at least one *other* outside cell was reached
-        return outside.stream().anyMatch(cell -> cell != start && visited.contains(cell));
+        return false;
     }
 
-    /** Redraws the maze cleanly (result is displayed externally). */
     public void validateMaze() {
         if (grid == null) return;
         draw();
@@ -242,11 +290,6 @@ public class CanvasPanel extends Canvas {
 
     // --- Export / Serialization ---
 
-    /**
-     * Saves a snapshot of the current canvas as a PNG file.
-     *
-     * @param file destination file (should end with .png)
-     */
     public void exportPng(File file) {
         if (grid == null) return;
         WritableImage image = snapshot(null, null);
@@ -257,35 +300,46 @@ public class CanvasPanel extends Canvas {
         }
     }
 
-    /**
-     * Serialises the current grid state to a file.
-     *
-     * @param file destination .maze file
-     */
     public void saveMaze(File file) {
         if (grid == null) return;
+        int sr = startCell != null ? startCell.getRow() : -1;
+        int sc = startCell != null ? startCell.getCol() : -1;
+        int er = endCell   != null ? endCell.getRow()   : -1;
+        int ec = endCell   != null ? endCell.getCol()   : -1;
+        MazeData data = new MazeData(grid, sr, sc, er, ec);
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(grid);
+            oos.writeObject(data);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    /**
-     * Restores a previously saved grid from a file.
-     *
-     * @param file source .maze file
-     */
-    @SuppressWarnings("unchecked")
     public void loadMaze(File file) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            List<List<Cell>> loaded = (List<List<Cell>>) ois.readObject();
-            if (loaded == null || loaded.isEmpty()) return;
-            grid = loaded;
+            MazeData data = (MazeData) ois.readObject();
+            if (data == null || data.grid == null || data.grid.isEmpty()) return;
+            grid = data.grid;
             int rows = grid.size();
             int cols = grid.get(0).size();
             setWidth(cols  * CELL_SIZE);
             setHeight(rows * CELL_SIZE);
+
+            // Restore start cell
+            if (data.startRow >= 0 && isValidCell(data.startRow, data.startCol)) {
+                startCell = grid.get(data.startRow).get(data.startCol);
+                if (onStartCellPicked != null) onStartCellPicked.accept(startCell);
+            } else {
+                startCell = null;
+            }
+
+            // Restore end cell
+            if (data.endRow >= 0 && isValidCell(data.endRow, data.endCol)) {
+                endCell = grid.get(data.endRow).get(data.endCol);
+                if (onEndCellPicked != null) onEndCellPicked.accept(endCell);
+            } else {
+                endCell = null;
+            }
+
             draw();
         } catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();

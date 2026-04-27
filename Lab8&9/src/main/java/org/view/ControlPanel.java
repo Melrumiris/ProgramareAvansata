@@ -13,6 +13,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.model.MazeGame;
 
 import java.io.File;
 
@@ -33,7 +34,10 @@ public class ControlPanel extends HBox {
         Button validateBtn = createButton("Validate", () -> {
             canvas.validateMaze();
             boolean valid = canvas.isValid();
-            statusLabel.setText(valid ? "✔ Valid maze – path exists!" : "✘ Invalid maze – no path found!");
+            String msg = canvas.getStartCell() == null || canvas.getEndCell() == null
+                    ? "✘ Set a start and end cell first!"
+                    : valid ? "✔ Valid maze – path exists!" : "✘ Invalid maze – no path found!";
+            statusLabel.setText(msg);
             statusLabel.setTextFill(valid ? Color.rgb(0, 140, 0) : Color.rgb(200, 0, 0));
             statusLabel.setVisible(true);
             hideTimer.playFromStart();
@@ -74,6 +78,30 @@ public class ControlPanel extends HBox {
             }
         });
 
+        // Play button – spawns one Bunny thread + robot threads
+        Button simBtn = createButton("Play", () -> {
+            if (canvas.getStartCell() == null || canvas.getEndCell() == null) {
+                statusLabel.setText("✘ Set a start and end cell first!");
+                statusLabel.setTextFill(Color.rgb(200, 0, 0));
+                statusLabel.setVisible(true);
+                hideTimer.playFromStart();
+                return;
+            }
+            if (!canvas.isValid()) {
+                statusLabel.setText("✘ No path from start to end!");
+                statusLabel.setTextFill(Color.rgb(200, 0, 0));
+                statusLabel.setVisible(true);
+                hideTimer.playFromStart();
+                return;
+            }
+            MazeGame game = new MazeGame(canvas.getGrid(), canvas.getStartCell(), canvas.getEndCell(), 3);
+            game.start();
+            statusLabel.setText("▶ Game running – see console");
+            statusLabel.setTextFill(Color.rgb(0, 100, 200));
+            statusLabel.setVisible(true);
+            hideTimer.playFromStart();
+        });
+
         getChildren().addAll(
                 createButton("Create",   canvas::generateMaze),
                 createButton("Reset",    canvas::resetWalls),
@@ -81,6 +109,7 @@ public class ControlPanel extends HBox {
                 exportBtn,
                 saveBtn,
                 loadBtn,
+                simBtn,
                 createButton("Exit",     Platform::exit),
                 statusLabel
         );
