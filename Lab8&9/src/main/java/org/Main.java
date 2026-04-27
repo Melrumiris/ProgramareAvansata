@@ -1,7 +1,8 @@
-package org.example;
+package org;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.app.MazeApp;
 
 public class Main extends Application {
 
@@ -15,3 +16,4 @@ public class Main extends Application {
         primaryStage.show();
     }
 }
+
