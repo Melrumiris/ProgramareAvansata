@@ -1,22 +1,29 @@
 package org.view;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import org.model.Cell;
 import org.model.MazeData;
 import org.model.Wall;
 
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -25,9 +32,8 @@ public class CanvasPanel extends Canvas {
 
     public enum PickMode { NONE, START, END }
 
-    private static final int    CELL_SIZE                = 40;
-    private static final double WALL_REMOVAL_PROBABILITY = 0.3;
-    private static final double HIT_THRESHOLD            = 6.0;
+    private static final int    CELL_SIZE      = 40;
+    private static final double HIT_THRESHOLD  = 6.0;
 
     private List<List<Cell>> grid;
     private final Random random = new Random();
@@ -38,6 +44,11 @@ public class CanvasPanel extends Canvas {
 
     private Consumer<Cell> onStartCellPicked;
     private Consumer<Cell> onEndCellPicked;
+
+    // --- Maze generation animation state ---
+    private Timeline generationTimeline = null;
+    private final Set<Cell> visitedCells = new HashSet<>();
+    private Cell currentGenerationCell = null;
 
     // --- Public API ---
 
@@ -82,26 +93,97 @@ public class CanvasPanel extends Canvas {
         draw();
     }
 
-    public void generateMaze() {
+    public void generateMaze(long stepDelayMs, Runnable onComplete) {
         if (grid == null) return;
-        resetWalls();
 
+        // Stop any in-progress animation
+        if (generationTimeline != null) {
+            generationTimeline.stop();
+            generationTimeline = null;
+        }
+
+        // Reset all walls without redrawing yet
+        grid.stream().flatMap(List::stream).forEach(Cell::resetWalls);
+        visitedCells.clear();
+        currentGenerationCell = null;
+
+        List<Runnable> steps = buildDFSSteps();
+
+        if (steps.isEmpty()) {
+            draw();
+            if (onComplete != null) onComplete.run();
+            return;
+        }
+
+        AtomicInteger index = new AtomicInteger(0);
+        generationTimeline = new Timeline(
+                new KeyFrame(Duration.millis(Math.max(1, stepDelayMs)), e -> {
+                    int i = index.getAndIncrement();
+                    if (i < steps.size()) steps.get(i).run();
+                })
+        );
+        generationTimeline.setCycleCount(steps.size());
+        generationTimeline.setOnFinished(e -> {
+            currentGenerationCell = null;
+            visitedCells.clear();
+            generationTimeline = null;
+            draw();
+            if (onComplete != null) onComplete.run();
+        });
+        generationTimeline.play();
+    }
+
+    private List<Runnable> buildDFSSteps() {
         int rows = grid.size();
         int cols = grid.get(0).size();
+        boolean[][] visited = new boolean[rows][cols];
+        List<Runnable> steps = new ArrayList<>();
 
-        IntStream.range(0, rows - 1).forEach(r ->
-                IntStream.range(0, cols).forEach(c -> {
-                    if (random.nextDouble() < WALL_REMOVAL_PROBABILITY)
-                        removeWall(r, c, Wall.BOTTOM);
-                }));
+        Deque<Cell> stack = new ArrayDeque<>();
+        Cell start = grid.get(0).get(0);
+        visited[start.getRow()][start.getCol()] = true;
+        visitedCells.add(start);
+        stack.push(start);
 
-        IntStream.range(0, rows).forEach(r ->
-                IntStream.range(0, cols - 1).forEach(c -> {
-                    if (random.nextDouble() < WALL_REMOVAL_PROBABILITY)
-                        removeWall(r, c, Wall.RIGHT);
-                }));
+        while (!stack.isEmpty()) {
+            Cell current = stack.peek();
 
-        draw();
+            // Collect unvisited neighbours in a random order
+            List<Wall> walls = new ArrayList<>(List.of(Wall.values()));
+            Collections.shuffle(walls, random);
+
+            Cell chosen = null;
+            Wall chosenWall = null;
+            for (Wall w : walls) {
+                int nr = current.getRow() + w.rowDelta();
+                int nc = current.getCol() + w.colDelta();
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && !visited[nr][nc]) {
+                    chosen = grid.get(nr).get(nc);
+                    chosenWall = w;
+                    break;
+                }
+            }
+
+            if (chosen != null) {
+                visited[chosen.getRow()][chosen.getCol()] = true;
+                final Cell from     = current;
+                final Cell to       = chosen;
+                final Wall wall     = chosenWall;
+                stack.push(chosen);
+
+                steps.add(() -> {
+                    // Remove wall between from and to (both sides)
+                    from.setWall(wall, false);
+                    to.setWall(wall.opposite(), false);
+                    visitedCells.add(to);
+                    currentGenerationCell = to;
+                    draw();
+                });
+            } else {
+                stack.pop(); // backtrack – no Runnable emitted
+            }
+        }
+        return steps;
     }
 
     public void resetWalls() {
@@ -226,6 +308,10 @@ public class CanvasPanel extends Canvas {
                 gc.setFill(Color.rgb(100, 200, 100));
             } else if (cell.equals(endCell)) {
                 gc.setFill(Color.rgb(200, 80, 80));
+            } else if (cell.equals(currentGenerationCell)) {
+                gc.setFill(Color.rgb(255, 165, 0));   // orange – active frontier
+            } else if (visitedCells.contains(cell)) {
+                gc.setFill(Color.rgb(180, 210, 255));  // light blue – already carved
             } else {
                 gc.setFill(Color.rgb(220, 220, 220));
             }

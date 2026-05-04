@@ -6,7 +6,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -30,6 +32,26 @@ public class ControlPanel extends HBox {
 
         PauseTransition hideTimer = new PauseTransition(Duration.seconds(5));
         hideTimer.setOnFinished(e -> statusLabel.setVisible(false));
+
+        // --- Speed slider (1 = slowest 200ms, 200 = fastest 1ms) ---
+        Slider speedSlider = new Slider(1, 200, 50);
+        speedSlider.setPrefWidth(90);
+        speedSlider.setMajorTickUnit(100);
+        speedSlider.setShowTickMarks(true);
+
+        Label speedLabel = new Label("Speed");
+        speedLabel.setFont(Font.font("SansSerif", 11));
+
+        VBox speedBox = new VBox(2, speedLabel, speedSlider);
+        speedBox.setAlignment(Pos.CENTER);
+
+        // --- Create button – triggers animated DFS maze generation ---
+        Button createBtn = new Button("Create");
+        createBtn.setOnAction(e -> {
+            long delayMs = (long) (201 - speedSlider.getValue());
+            createBtn.setDisable(true);
+            canvas.generateMaze(delayMs, () -> Platform.runLater(() -> createBtn.setDisable(false)));
+        });
 
         Button validateBtn = createButton("Validate", () -> {
             canvas.validateMaze();
@@ -103,7 +125,8 @@ public class ControlPanel extends HBox {
         });
 
         getChildren().addAll(
-                createButton("Create",   canvas::generateMaze),
+                createBtn,
+                speedBox,
                 createButton("Reset",    canvas::resetWalls),
                 validateBtn,
                 exportBtn,
