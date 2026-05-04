@@ -4,9 +4,11 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,11 +17,17 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.model.GameManager;
 import org.model.MazeGame;
+import org.model.Robot;
 
 import java.io.File;
+import java.util.List;
 
 public class ControlPanel extends HBox {
+
+    private static final long TIME_LIMIT_MS      = 120_000; // 2 minutes
+    private static final long REPORT_INTERVAL_MS =  15_000; // 15 seconds
 
     public ControlPanel(CanvasPanel canvas, Stage stage) {
         super(10);
@@ -116,8 +124,13 @@ public class ControlPanel extends HBox {
                 hideTimer.playFromStart();
                 return;
             }
-            MazeGame game = new MazeGame(canvas.getGrid(), canvas.getStartCell(), canvas.getEndCell(), 3);
+            MazeGame game = new MazeGame(
+                    canvas.getGrid(), canvas.getStartCell(), canvas.getEndCell(), 3);
             game.start();
+            canvas.setGame(game);
+            new GameManager(game, TIME_LIMIT_MS, REPORT_INTERVAL_MS).start();
+            Scene scene = stage.getScene();
+            if (scene != null) setupKeyboard(scene, game);
             statusLabel.setText("▶ Game running – see console");
             statusLabel.setTextFill(Color.rgb(0, 100, 200));
             statusLabel.setVisible(true);
@@ -142,5 +155,101 @@ public class ControlPanel extends HBox {
         Button btn = new Button(label);
         btn.setOnAction(e -> action.run());
         return btn;
+    }
+
+    // Keyboard controls
+
+    private void setupKeyboard(Scene scene, MazeGame game) {
+        // Mutable selection state — use single-element arrays for lambda capture
+        Robot[]  selectedRobot  = {null};
+        boolean[] bunnySelected = {false};
+
+        scene.setOnKeyPressed(event -> {
+            if (game.isGameOver()) return;
+
+            KeyCode code = event.getCode();
+
+            // --- Entity selection (1-9 / B / ESC) ---
+            String codeName = code.name();
+            if (codeName.startsWith("DIGIT") && codeName.length() == 6) {
+                int idx = (codeName.charAt(5) - '0') - 1;
+                List<Robot> robots = game.getRobots();
+                if (idx >= 0 && idx < robots.size()) {
+                    selectedRobot[0]  = robots.get(idx);
+                    bunnySelected[0]  = false;
+                    System.out.println("[Keyboard] Selected " + selectedRobot[0].getName());
+                }
+                return;
+            }
+
+            switch (code) {
+                case B -> {
+                    bunnySelected[0] = true;
+                    selectedRobot[0] = null;
+                    System.out.println("[Keyboard] Selected Bunny");
+                }
+                case ESCAPE -> {
+                    selectedRobot[0] = null;
+                    bunnySelected[0] = false;
+                    System.out.println("[Keyboard] Selected ALL");
+                }
+                case SPACE, P -> {
+                    if (selectedRobot[0] != null) {
+                        selectedRobot[0].pause();
+                        System.out.println("[Keyboard] Paused " + selectedRobot[0].getName());
+                    } else if (bunnySelected[0]) {
+                        game.getBunny().pause();
+                        System.out.println("[Keyboard] Paused Bunny");
+                    } else {
+                        game.getRobots().forEach(Robot::pause);
+                        game.getBunny().pause();
+                        System.out.println("[Keyboard] Paused ALL");
+                    }
+                }
+                case R -> {
+                    if (selectedRobot[0] != null) {
+                        selectedRobot[0].unpause();
+                        System.out.println("[Keyboard] Resumed " + selectedRobot[0].getName());
+                    } else if (bunnySelected[0]) {
+                        game.getBunny().unpause();
+                        System.out.println("[Keyboard] Resumed Bunny");
+                    } else {
+                        game.getRobots().forEach(Robot::unpause);
+                        game.getBunny().unpause();
+                        System.out.println("[Keyboard] Resumed ALL");
+                    }
+                }
+                case PLUS, EQUALS -> {
+                    if (selectedRobot[0] != null) {
+                        selectedRobot[0].speedUp();
+                        System.out.println("[Keyboard] Speed up " + selectedRobot[0].getName());
+                    } else if (bunnySelected[0]) {
+                        game.getBunny().speedUp();
+                        System.out.println("[Keyboard] Speed up Bunny");
+                    } else {
+                        game.getRobots().forEach(Robot::speedUp);
+                        game.getBunny().speedUp();
+                        System.out.println("[Keyboard] Speed up ALL");
+                    }
+                }
+                case MINUS -> {
+                    if (selectedRobot[0] != null) {
+                        selectedRobot[0].slowDown();
+                        System.out.println("[Keyboard] Slow down " + selectedRobot[0].getName());
+                    } else if (bunnySelected[0]) {
+                        game.getBunny().slowDown();
+                        System.out.println("[Keyboard] Slow down Bunny");
+                    } else {
+                        game.getRobots().forEach(Robot::slowDown);
+                        game.getBunny().slowDown();
+                        System.out.println("[Keyboard] Slow down ALL");
+                    }
+                }
+                default -> { /* ignore */ }
+            }
+        });
+
+        System.out.println("[Keyboard] Controls active: 1-9=select robot, B=bunny, " +
+                "ESC=all, SPACE/P=pause, R=unpause, +/-=speed");
     }
 }

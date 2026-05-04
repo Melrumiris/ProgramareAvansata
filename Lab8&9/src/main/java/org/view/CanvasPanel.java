@@ -8,9 +8,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.model.Cell;
 import org.model.MazeData;
+import org.model.MazeGame;
+import org.model.Robot;
 import org.model.Wall;
 
 import javax.imageio.ImageIO;
@@ -49,6 +52,10 @@ public class CanvasPanel extends Canvas {
     private Timeline generationTimeline = null;
     private final Set<Cell> visitedCells = new HashSet<>();
     private Cell currentGenerationCell = null;
+
+    // --- Live game rendering ---
+    private MazeGame activeGame = null;
+    private Timeline gameRenderTimeline = null;
 
     // --- Public API ---
 
@@ -298,6 +305,55 @@ public class CanvasPanel extends Canvas {
         if (grid == null) return;
         drawCellBackgrounds(gc);
         drawWalls(gc);
+        drawGenerationOverlay(gc);
+        drawStaticEmoji(gc);
+        if (activeGame != null) drawEntities(gc);
+    }
+
+    public void setGame(MazeGame game) {
+        this.activeGame = game;
+        if (gameRenderTimeline != null) gameRenderTimeline.stop();
+        gameRenderTimeline = new Timeline(new KeyFrame(Duration.millis(200), e -> {
+            draw();
+            if (activeGame != null && activeGame.isGameOver()) {
+                gameRenderTimeline.stop();
+                draw(); // one final repaint to show end state
+            }
+        }));
+        gameRenderTimeline.setCycleCount(Timeline.INDEFINITE);
+        gameRenderTimeline.play();
+    }
+
+    public void stopGameRendering() {
+        if (gameRenderTimeline != null) {
+            gameRenderTimeline.stop();
+            gameRenderTimeline = null;
+        }
+        activeGame = null;
+        draw();
+    }
+
+    private void drawEntities(GraphicsContext gc) {
+        gc.setFont(Font.font("Noto Emoji", CELL_SIZE * 0.75));
+        gc.setFill(Color.BLACK);
+
+        // Vertical baseline offset so the glyph sits inside the cell
+        double ox = CELL_SIZE * 0.05;
+        double oy = CELL_SIZE * 0.82;
+
+        // Robots — get a snapshot to avoid holding the lock during rendering
+        activeGame.getRobotPositions().forEach((cell, robot) ->
+                gc.fillText("🤖",
+                        cell.getCol() * CELL_SIZE + ox,
+                        cell.getRow() * CELL_SIZE + oy));
+
+        // Bunny
+        Cell bunnyCell = activeGame.getBunnyCell();
+        if (bunnyCell != null) {
+            gc.fillText("🐰",
+                    bunnyCell.getCol() * CELL_SIZE + ox,
+                    bunnyCell.getRow() * CELL_SIZE + oy);
+        }
     }
 
     private void drawCellBackgrounds(GraphicsContext gc) {
@@ -305,22 +361,36 @@ public class CanvasPanel extends Canvas {
             double x = cell.getCol() * CELL_SIZE;
             double y = cell.getRow() * CELL_SIZE;
             if (cell.equals(startCell)) {
-                gc.setFill(Color.rgb(100, 200, 100));
-            } else if (cell.equals(endCell)) {
-                gc.setFill(Color.rgb(200, 80, 80));
-            } else if (cell.equals(currentGenerationCell)) {
-                gc.setFill(Color.rgb(255, 165, 0));   // orange – active frontier
-            } else if (visitedCells.contains(cell)) {
-                gc.setFill(Color.rgb(180, 210, 255));  // light blue – already carved
+                gc.setFill(Color.rgb(160, 110, 52));   // dirt brown
+            } else if (cell.equals(currentGenerationCell) || visitedCells.contains(cell)) {
+                gc.setFill(Color.rgb(162, 218, 88));   // bright freshly-mowed grass
             } else {
-                gc.setFill(Color.rgb(220, 220, 220));
+                gc.setFill(Color.rgb(120, 175, 55));   // grass green
             }
             gc.fillRect(x, y, CELL_SIZE, CELL_SIZE);
         });
     }
 
+    private void drawGenerationOverlay(GraphicsContext gc) {
+        if (currentGenerationCell == null) return;
+        gc.setFont(Font.font("Noto Emoji", CELL_SIZE * 0.75));
+        gc.setFill(Color.BLACK);
+        gc.fillText("🚜",
+                currentGenerationCell.getCol() * CELL_SIZE + CELL_SIZE * 0.05,
+                currentGenerationCell.getRow() * CELL_SIZE + CELL_SIZE * 0.82);
+    }
+
+    private void drawStaticEmoji(GraphicsContext gc) {
+        if (endCell == null) return;
+        gc.setFont(Font.font("Noto Emoji", CELL_SIZE * 0.75));
+        gc.setFill(Color.BLACK);
+        gc.fillText("🏁",
+                endCell.getCol() * CELL_SIZE + CELL_SIZE * 0.05,
+                endCell.getRow() * CELL_SIZE + CELL_SIZE * 0.82);
+    }
+
     private void drawWalls(GraphicsContext gc) {
-        gc.setStroke(Color.rgb(80, 80, 80));
+        gc.setStroke(Color.rgb(25, 90, 25));   // deep bush green
         gc.setLineWidth(3.0);
 
         grid.stream().flatMap(List::stream).forEach(cell -> {

@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MazeGame {
 
-    public enum State { RUNNING, BUNNY_ESCAPED, BUNNY_CAUGHT }
+    public enum State { RUNNING, BUNNY_ESCAPED, BUNNY_CAUGHT, TIMEOUT }
 
     private final List<List<Cell>> grid;
     private final Cell exitCell;
@@ -17,6 +17,7 @@ public class MazeGame {
     private volatile State state = State.RUNNING;
     private String resultMessage = "";
     private final AtomicBoolean resultPrinted = new AtomicBoolean(false);
+    private final long startTime = System.currentTimeMillis();
 
     // Construction
 
@@ -54,6 +55,14 @@ public class MazeGame {
                 exitCell.getRow() + "," + exitCell.getCol() + ") ===");
         bunny.start();
         robots.forEach(Thread::start);
+    }
+
+    public synchronized void forceStop() {
+        if (state != State.RUNNING) return;
+        state = State.TIMEOUT;
+        resultMessage = "Time limit exceeded!";
+        bunny.interrupt();
+        robots.forEach(Thread::interrupt);
     }
 
     // Synchronized move primitives
@@ -94,6 +103,12 @@ public class MazeGame {
     public List<List<Cell>>     getGrid()     { return grid; }
     public Cell                 getExitCell() { return exitCell; }
 
+    public synchronized Cell             getBunnyCell()      { return bunnyCell; }
+    public List<Robot>                   getRobots()         { return robots; }
+    public Bunny                         getBunny()          { return bunny; }
+    public long                          getElapsedMs()      { return System.currentTimeMillis() - startTime; }
+    public synchronized Map<Cell, Robot> getRobotPositions() { return new LinkedHashMap<>(robotPositions); }
+
     // Result announcement (printed exactly once when the game ends)
 
     public void announceResult() {
@@ -104,7 +119,6 @@ public class MazeGame {
 
     // Helpers
 
-    /** BFS from start; returns all cells in the same connected component. */
     private Set<Cell> bfsReachable(Cell start) {
         Set<Cell> visited = new LinkedHashSet<>();
         Queue<Cell> queue = new ArrayDeque<>();

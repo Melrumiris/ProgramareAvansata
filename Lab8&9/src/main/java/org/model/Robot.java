@@ -1,72 +1,111 @@
 package org.model;
 
-import java.util.ArrayList;
+import org.ai.BFSExplorer;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
+import java.util.Set;
 
 
 public class Robot extends Thread {
 
-    private static final int MOVE_DELAY_MS = 1500;
+    private volatile long moveDelayMs = 1500;
+
+    private volatile boolean paused = false;
 
     private Cell currentCell;
     private final MazeGame game;
-    private final Random rng = new Random();
+
+    // --- BFS exploration state ---
+    private final Set<Cell>   exploredCells = new HashSet<>();
+    private final Deque<Cell> currentPath   = new ArrayDeque<>();
 
     public Robot(String name, Cell startCell, MazeGame game) {
         super(name);
         this.currentCell = startCell;
         this.game = game;
+        exploredCells.add(startCell);
         setDaemon(true);
     }
 
+    // --- Speed / pause controls (called from external threads) ---
+
+    public void pause()    { this.paused = true; }
+    public void unpause()  { this.paused = false; }
+    public void speedUp()  { moveDelayMs = Math.max(200,  moveDelayMs - 200); }
+    public void slowDown() { moveDelayMs = Math.min(3000, moveDelayMs + 200); }
+
+    // ---------------------------------------------------------------
+
     @Override
     public void run() {
-        System.out.println("[" + getName() + "] starts at (" +
-                currentCell.getRow() + "," + currentCell.getCol() + ")");
 
         while (!game.isGameOver()) {
-            List<Cell> neighbours = reachableNeighbours();
+            Cell next = nextTarget();
 
-            if (!neighbours.isEmpty()) {
-                Cell next = neighbours.get(rng.nextInt(neighbours.size()));
-
-                // Synchronized move: game ensures no two robots share a cell
+            if (next != null) {
                 if (game.tryMoveRobot(this, currentCell, next)) {
                     currentCell = next;
-                    System.out.println("[" + getName() + "] → (" +
-                            currentCell.getRow() + "," + currentCell.getCol() + ")");
+                    exploredCells.add(next);
+                    currentPath.poll();   // consume this step from the plan
+
+                } else {
+                    // Blocked (another robot at target) — recalculate path
+                    currentPath.clear();
                 }
             }
 
             if (game.isGameOver()) break;
 
             try {
-                Thread.sleep(MOVE_DELAY_MS);
+                waitForNextMove();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
             }
         }
 
-        System.out.println("[" + getName() + "] stopped.");
         game.announceResult();
     }
 
     // ---------------------------------------------------------------
 
-    private List<Cell> reachableNeighbours() {
-        List<Cell> result = new ArrayList<>();
-        List<List<Cell>> grid = game.getGrid();
-        int rows = grid.size(), cols = grid.get(0).size();
+    private Cell nextTarget() {
+        if (!currentPath.isEmpty()) return currentPath.peek();
 
-        for (Wall w : Wall.values()) {
-            if (currentCell.hasWall(w)) continue;
-            int nr = currentCell.getRow() + w.rowDelta();
-            int nc = currentCell.getCol() + w.colDelta();
-            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols)
-                result.add(grid.get(nr).get(nc));
+        // Try to reach the nearest unexplored cell
+        List<Cell> path = BFSExplorer.findNearestUnvisited(
+                currentCell, exploredCells, game.getGrid());
+        if (!path.isEmpty()) {
+            currentPath.addAll(path);
+            return currentPath.peek();
         }
-        return result;
+
+        // All reachable cells explored — navigate to exit through known cells only
+        List<Cell> toExit = BFSExplorer.findPathInExplored(
+                currentCell, game.getExitCell(), exploredCells, game.getGrid());
+        if (!toExit.isEmpty()) {
+            currentPath.addAll(toExit);
+            return currentPath.peek();
+        }
+
+        return null;
+    }
+
+    private void waitForNextMove() throws InterruptedException {
+        long deadline = System.currentTimeMillis() + moveDelayMs;
+        while (!game.isGameOver()) {
+            if (paused) {
+                Thread.sleep(50);
+                // Keep advancing the deadline so we wait the full delay after resuming
+                deadline = System.currentTimeMillis() + moveDelayMs;
+                continue;
+            }
+            if (System.currentTimeMillis() >= deadline) break;
+            Thread.sleep(50);
+        }
     }
 }
+
