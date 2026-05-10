@@ -5,10 +5,6 @@ import java.util.Map;
 
 public class GameManager extends Thread {
 
-    private static final String CMD_LIST =
-            "  Commands: [1-9] select robot  [B] bunny  [ESC] all" +
-            "  |  [SPACE/P] pause  [R] unpause  [+] speed up  [-] slow down";
-
     private final MazeGame game;
     private final long timeLimitMs;
     private final long reportIntervalMs;
@@ -37,26 +33,30 @@ public class GameManager extends Thread {
             if (game.isGameOver()) break;
 
             long elapsedMs = game.getElapsedMs();
-            Cell bunnyPos  = game.getBunnyCell();
-            Bunny bunny    = game.getBunny();
             int totalCells = game.getGrid().size() * game.getGrid().get(0).size();
 
             System.out.println();
             System.out.println("[GameManager] ── Status Report ───────────────────────────");
             System.out.printf( "  Elapsed  : %d s / %d s%n", elapsedMs / 1000, timeLimitMs / 1000);
             System.out.printf( "  State    : %s%n", game.getState());
-            System.out.printf( "  🐰 Bunny   : (%d, %d)  explored %d/%d cells%s%n",
-                    bunnyPos != null ? bunnyPos.getRow() : -1,
-                    bunnyPos != null ? bunnyPos.getCol() : -1,
-                    bunny.getExploredCount(), totalCells,
-                    bunny.hasSpottedExit() ? "  ✓ EXIT SPOTTED" : "");
+
+            // Report each active bunny
+            Map<Bunny, Cell> bunnyPositions = game.getBunnyPositions();
+            if (bunnyPositions.isEmpty()) {
+                System.out.println("  🐰 No bunnies active yet");
+            } else {
+                bunnyPositions.forEach((bunny, cell) ->
+                        System.out.printf("  🐰 %-12s : (%d, %d)  explored %d/%d cells%s%n",
+                                bunny.getName(), cell.getRow(), cell.getCol(),
+                                bunny.getExploredCount(), totalCells,
+                                bunny.hasSpottedExit() ? "  ✓ EXIT SPOTTED" : ""));
+            }
 
             Map<Cell, Robot> positions = game.getRobotPositions();
             positions.forEach((cell, robot) ->
                     System.out.printf("  🤖 %-6s : (%d, %d)%n",
                             robot.getName(), cell.getRow(), cell.getCol()));
             System.out.println("[GameManager] ────────────────────────────────────────────────────");
-            System.out.println(CMD_LIST);
 
             if (elapsedMs >= timeLimitMs) {
                 System.out.println("[GameManager] Time limit exceeded! Stopping game.");
@@ -69,3 +69,4 @@ public class GameManager extends Thread {
                 game.getState(), game.getElapsedMs() / 1000.0);
     }
 }
+

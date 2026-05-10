@@ -5,7 +5,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ConfigPanel extends HBox {
@@ -26,6 +25,13 @@ public class ConfigPanel extends HBox {
     private final ToggleButton pickEndBtn = new ToggleButton("Pick End");
     private final Spinner<Integer> endRowSpinner;
     private final Spinner<Integer> endColSpinner;
+
+    // Game configuration
+    private final Spinner<Integer> robotCountSpinner;
+    private final Spinner<Integer> bunnyCountSpinner;
+    private final CheckBox         manualModeCheck;
+
+    private Runnable onConfigChange;
 
     public ConfigPanel(CanvasPanel canvas, Stage stage) {
         super(12);
@@ -65,7 +71,6 @@ public class ConfigPanel extends HBox {
             }
         });
 
-        // Update canvas when spinners are changed manually
         startRowSpinner.valueProperty().addListener((obs, o, n) -> {
             if (canvas.getStartCell() == null ||
                     canvas.getStartCell().getRow() != n) {
@@ -79,7 +84,6 @@ public class ConfigPanel extends HBox {
             }
         });
 
-        // Callback: canvas notifies us after a cell is clicked in pick mode
         canvas.setOnStartCellPicked(cell -> {
             pickStartBtn.setSelected(false);
             startRowSpinner.getValueFactory().setValue(cell.getRow());
@@ -142,12 +146,47 @@ public class ConfigPanel extends HBox {
                 new Label("Col:"), endColSpinner);
         endRow.setAlignment(Pos.CENTER_LEFT);
 
+        // --- Game configuration row ---
+        robotCountSpinner = new Spinner<>(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9, 3));
+        bunnyCountSpinner = new Spinner<>(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
+        robotCountSpinner.setPrefWidth(60);
+        bunnyCountSpinner.setPrefWidth(60);
+
+        manualModeCheck = new CheckBox("Manual bunny");
+
+        // Fire config-change event whenever these values change
+        robotCountSpinner.valueProperty().addListener((obs, o, n) -> fireConfigChange());
+        bunnyCountSpinner.valueProperty().addListener((obs, o, n) -> fireConfigChange());
+        manualModeCheck.selectedProperty().addListener((obs, o, n) -> fireConfigChange());
+
+        HBox gameConfigRow = new HBox(8,
+                new Label("Robots:"), robotCountSpinner,
+                new Label("Bunnies:"), bunnyCountSpinner,
+                manualModeCheck);
+        gameConfigRow.setAlignment(Pos.CENTER_LEFT);
+
         Separator sep1 = new Separator(Orientation.VERTICAL);
         Separator sep2 = new Separator(Orientation.VERTICAL);
+        Separator sep3 = new Separator(Orientation.VERTICAL);
 
-        getChildren().addAll(gridRow, sep1, startRow, sep2, endRow);
+        getChildren().addAll(gridRow, sep1, startRow, sep2, endRow, sep3, gameConfigRow);
     }
 
-    public int getSelectedRows() { return rowsSpinner.getValue(); }
-    public int getSelectedCols() { return colsSpinner.getValue(); }
+    // --- Accessors ---
+
+    public int     getSelectedRows() { return rowsSpinner.getValue(); }
+    public int     getSelectedCols() { return colsSpinner.getValue(); }
+    public int     getNumRobots()    { return robotCountSpinner.getValue(); }
+    public int     getBunnyCount()   { return bunnyCountSpinner.getValue(); }
+    public boolean isManualMode()    { return manualModeCheck.isSelected(); }
+
+    /** Register a callback invoked whenever robot count, bunny count, or manual mode changes. */
+    public void setOnConfigChange(Runnable cb) { this.onConfigChange = cb; }
+
+    private void fireConfigChange() {
+        if (onConfigChange != null) onConfigChange.run();
+    }
 }
+

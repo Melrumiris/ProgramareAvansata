@@ -97,6 +97,41 @@ public class BFSExplorer {
         return Collections.emptyList();
     }
 
+    /**
+     * Like {@link #findNearestUnvisited(Cell, Set, List)} but additionally skips
+     * cells in {@code blocked} during traversal.  If no unblocked path exists,
+     * returns an empty list (caller should fall back to the unblocked variant).
+     */
+    public static List<Cell> findNearestUnvisited(Cell from, Set<Cell> visited,
+                                                   Set<Cell> blocked,
+                                                   List<List<Cell>> grid) {
+        int rows = grid.size(), cols = grid.get(0).size();
+        Map<Cell, Cell> parent = new HashMap<>();
+        Queue<Cell> queue = new ArrayDeque<>();
+        queue.add(from);
+        parent.put(from, null);
+
+        while (!queue.isEmpty()) {
+            Cell cur = queue.poll();
+            if (!visited.contains(cur) && !cur.equals(from)) {
+                return buildPath(parent, cur);
+            }
+            for (Wall w : Wall.values()) {
+                if (cur.hasWall(w)) continue;
+                int nr = cur.getRow() + w.rowDelta();
+                int nc = cur.getCol() + w.colDelta();
+                if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+                Cell next = grid.get(nr).get(nc);
+                if (blocked.contains(next)) continue;       // steer around other bunnies
+                if (!parent.containsKey(next)) {
+                    parent.put(next, cur);
+                    queue.add(next);
+                }
+            }
+        }
+        return Collections.emptyList();
+    }
+
     private static List<Cell> buildPath(Map<Cell, Cell> parent, Cell target) {
         LinkedList<Cell> path = new LinkedList<>();
         Cell cur = target;

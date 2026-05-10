@@ -9,11 +9,12 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
+import org.model.Bunny;
 import org.model.Cell;
 import org.model.MazeData;
 import org.model.MazeGame;
-import org.model.Robot;
 import org.model.Wall;
 
 import javax.imageio.ImageIO;
@@ -24,6 +25,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,6 +39,8 @@ public class CanvasPanel extends Canvas {
 
     private static final int    CELL_SIZE      = 40;
     private static final double HIT_THRESHOLD  = 6.0;
+    /** How many milliseconds the ! alert marker stays visible after a sighting. */
+    private static final long   ALERT_TTL_MS   = 3000;
 
     private List<List<Cell>> grid;
     private final Random random = new Random();
@@ -56,6 +60,11 @@ public class CanvasPanel extends Canvas {
     // --- Live game rendering ---
     private MazeGame activeGame = null;
     private Timeline gameRenderTimeline = null;
+
+    /** Non-null while the end-of-game overlay is being displayed. */
+    private String  overlayMessage  = null;
+    private Color   overlayColor    = Color.WHITE;
+    private Color   overlayBgColor  = Color.BLACK;
 
     // --- Public API ---
 
@@ -308,6 +317,7 @@ public class CanvasPanel extends Canvas {
         drawGenerationOverlay(gc);
         drawStaticEmoji(gc);
         if (activeGame != null) drawEntities(gc);
+        if (overlayMessage != null) drawOverlay(gc);
     }
 
     public void setGame(MazeGame game) {
@@ -316,8 +326,35 @@ public class CanvasPanel extends Canvas {
         gameRenderTimeline = new Timeline(new KeyFrame(Duration.millis(200), e -> {
             draw();
             if (activeGame != null && activeGame.isGameOver()) {
+                // Capture state before clearing activeGame
+                MazeGame ended = activeGame;
+                activeGame = null;
                 gameRenderTimeline.stop();
-                draw(); // one final repaint to show end state
+
+                // Choose overlay text and colours based on outcome
+                MazeGame.State s = ended.getState();
+                String msg = switch (s) {
+                    case BUNNY_ESCAPED -> "🐰 Bunnies Win! 🎉";
+                    case BUNNY_CAUGHT  -> "🤖 All Bunnies Caught!";
+                    case TIMEOUT       -> "⏰ Time's Up! No winner.";
+                    default            -> "Game Over";
+                };
+                overlayColor = switch (s) {
+                    case BUNNY_ESCAPED -> Color.rgb(60, 200, 60);
+                    case BUNNY_CAUGHT  -> Color.rgb(220, 60, 60);
+                    default            -> Color.rgb(255, 200, 0);
+                };
+                overlayBgColor = Color.rgb(0, 0, 0, 0.65);
+                overlayMessage = msg;
+                draw(); // paint the overlay immediately
+
+                // Clear board after 10 seconds
+                Timeline clearTimer = new Timeline(
+                        new KeyFrame(Duration.seconds(10), ev -> {
+                            overlayMessage = null;
+                            stopGameRendering();
+                        }));
+                clearTimer.play();
             }
         }));
         gameRenderTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -330,30 +367,55 @@ public class CanvasPanel extends Canvas {
             gameRenderTimeline = null;
         }
         activeGame = null;
+        overlayMessage = null;
         draw();
     }
 
     private void drawEntities(GraphicsContext gc) {
-        gc.setFont(Font.font("Noto Emoji", CELL_SIZE * 0.75));
-        gc.setFill(Color.BLACK);
-
-        // Vertical baseline offset so the glyph sits inside the cell
         double ox = CELL_SIZE * 0.05;
         double oy = CELL_SIZE * 0.82;
 
-        // Robots — get a snapshot to avoid holding the lock during rendering
+        // Robots
+        gc.setFont(Font.font("Noto Emoji", CELL_SIZE * 0.75));
+        gc.setFill(Color.BLACK);
         activeGame.getRobotPositions().forEach((cell, robot) ->
                 gc.fillText("🤖",
                         cell.getCol() * CELL_SIZE + ox,
                         cell.getRow() * CELL_SIZE + oy));
 
-        // Bunny
-        Cell bunnyCell = activeGame.getBunnyCell();
-        if (bunnyCell != null) {
-            gc.fillText("🐰",
-                    bunnyCell.getCol() * CELL_SIZE + ox,
-                    bunnyCell.getRow() * CELL_SIZE + oy);
-        }
+        // All active bunnies
+        Map<Bunny, Cell> bunnyPositions = activeGame.getBunnyPositions();
+        bunnyPositions.forEach((bunny, cell) ->
+                gc.fillText("🐰",
+                        cell.getCol() * CELL_SIZE + ox,
+                        cell.getRow() * CELL_SIZE + oy));
+
+        // Alert (!) markers — drawn on cells where robots last spotted a bunny
+        long now = System.currentTimeMillis();
+        gc.setFont(Font.font("SansSerif", FontWeight.BOLD, (int)(CELL_SIZE * 0.6)));
+        gc.setFill(Color.rgb(220, 50, 50));
+        activeGame.getAlertedCells().forEach((cell, timestamp) -> {
+            if (now - timestamp < ALERT_TTL_MS) {
+                gc.fillText("!",
+                        cell.getCol() * CELL_SIZE + CELL_SIZE * 0.40,
+                        cell.getRow() * CELL_SIZE + CELL_SIZE * 0.65);
+            }
+        });
+    }
+
+    private void drawOverlay(GraphicsContext gc) {
+        double w = getWidth(), h = getHeight();
+
+        // Semi-transparent dark backdrop
+        gc.setFill(overlayBgColor);
+        gc.fillRoundRect(w * 0.05, h * 0.3, w * 0.9, h * 0.4, 24, 24);
+
+        // Message text — scale font to fit width
+        gc.setFont(Font.font("SansSerif", FontWeight.BOLD, Math.min(48, w / 10)));
+        gc.setFill(overlayColor);
+        gc.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
+        gc.fillText(overlayMessage, w / 2, h / 2 + 16, w * 0.88);
+        gc.setTextAlign(javafx.scene.text.TextAlignment.LEFT); // restore default
     }
 
     private void drawCellBackgrounds(GraphicsContext gc) {
