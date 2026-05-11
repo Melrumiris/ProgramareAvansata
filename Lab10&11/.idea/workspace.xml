@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="59256ca4-16a0-4beb-93a6-c2933bf3439a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/commands/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/commands/CommandFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/commands/LoginCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/database/dao/PlayerRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/database/entity/Game.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/database/entity/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/database/entity/Question.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/database/entity/Result.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/java/org/exceptions/InvalidCommandException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ServerApplication/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ClientApplication/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ClientApplication/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ClientApplication/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ClientApplication/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ClientApplication/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ClientApplication/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ClientApplication/src/main/java/org/client/GameClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ClientApplication/src/main/java/org/io/Input.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ServerApplication/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ServerApplication/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ServerApplication/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ServerApplication/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ServerApplication/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ServerApplication/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ServerApplication/src/main/java/org/connections/ClientThread.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab10/ServerApplication/src/main/java/org/server/GameServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab8/.idea/workspace.xml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotChats">
+    <option name="panelChat">
+      <chat>
+        <option name="activeSessionId" value="41f73cfd-5e79-498f-b5d4-0e7ab8255161" />
+        <option name="sessions">
+          <session>
+            <option name="chatType" value="PANEL" />
+            <option name="id" value="a3f0e49b-0768-4792-a6a9-2d3e62d9f399" />
+            <option name="modeId" value="Agent" />
+            <option name="modelType" value="builtin_family" />
+            <option name="modelValue" value="auto" />
+            <option name="targetType" value="LOCAL" />
+          </session>
+          <session>
+            <option name="chatType" value="PANEL" />
+            <option name="id" value="41f73cfd-5e79-498f-b5d4-0e7ab8255161" />
+            <option name="modeId" value="Agent" />
+            <option name="modelType" value="builtin_family" />
+            <option name="modelValue" value="auto" />
+            <option name="targetType" value="LOCAL" />
+          </session>
+        </option>
+        <option name="type" value="PANEL" />
+      </chat>
+    </option>
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/home/melrumiris/IdeaProjects/AdvancedProgramming/Lab10" value="3DE7BYeLifHfW5DKzPGShEACaN7" />
+      <entry key="_/home/melrumiris/IdeaProjects/AdvancedProgramming/Lab10&amp;11" value="3DZeY76Dj0HZdNYhI5Ds3q4eu12" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Melrumiris&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Melrumiris/ProgramareAvansata.git&quot;,
+    &quot;accountId&quot;: &quot;fe7834b3-3b52-46b3-9dd4-3a86785e83f3&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3DE7BYeLifHfW5DKzPGShEACaN7" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+    <option name="sortByType" value="true" />
+    <option name="sortKey" value="BY_TYPE" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/melrumiris/IdeaProjects/AdvancedProgramming/Lab10&11",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "/home/melrumiris/IdeaProjects/AdvancedProgramming/Lab10/src/main/java/org/example/Main.java",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="59256ca4-16a0-4beb-93a6-c2933bf3439a" name="Changes" comment="" />
+      <created>1777835242322</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1777835242322</updated>
+      <workItem from="1777835246404" duration="809000" />
+      <workItem from="1777893201943" duration="498000" />
+      <workItem from="1778230080992" duration="66000" />
+      <workItem from="1778482574812" duration="25000" />
+      <workItem from="1778494065219" duration="9000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
