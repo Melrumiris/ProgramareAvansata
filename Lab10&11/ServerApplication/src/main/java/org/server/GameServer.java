@@ -1,6 +1,7 @@
 package org.server;
 
 import org.connections.ClientThread;
+import org.database.JPAUtil;
 import org.instances.RunningGame;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class GameServer {
             } catch (IOException e) {
                 System.err.println("Error closing server socket during shutdown: " + e.getMessage());
             }
+            JPAUtil.close();
         }));
         while (running) {
             try {

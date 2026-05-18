@@ -2,7 +2,29 @@ package org.commands;
 
 import org.connections.ClientThread;
 
+import java.util.Map;
+import java.util.function.BiFunction;
+
 public class CommandFactory {
+
+    /**
+     * Dispatch table mapping each command token to a factory function.
+     * Commands that take no argument string use a lambda that ignores the second parameter.
+     */
+    private static final Map<String, BiFunction<ClientThread, String, Command>> COMMANDS =
+            Map.ofEntries(
+                    Map.entry("\\login",     LoginCommand::new),
+                    Map.entry("\\register",  RegisterCommand::new),
+                    Map.entry("\\logout",    (client, args) -> new LogoutCommand(client)),
+                    Map.entry("\\opengame",  OpenGameCommand::new),
+                    Map.entry("\\joingame",  JoinGameCommand::new),
+                    Map.entry("\\startgame", StartGameCommand::new),
+                    Map.entry("\\answer",    AnswerCommand::new),
+                    Map.entry("\\search",    SearchCommand::new),
+                    Map.entry("\\stop",      (client, args) -> new StopCommand(client)),
+                    Map.entry("\\help",      (client, args) -> new HelpCommand(client))
+            );
+
     public static Command createCommand(String cmd, ClientThread client) {
         if (cmd == null || cmd.isEmpty())
             return new InvalidCommand(client, "Empty command");
@@ -13,17 +35,10 @@ public class CommandFactory {
         String command = parts[0].toLowerCase();
         String args = parts.length == 2 ? parts[1] : "";
 
-        switch (command) {
-            case "\\login":      return new LoginCommand(client, args);
-            case "\\register":   return new RegisterCommand(client, args);
-            case "\\logout":     return new LogoutCommand(client);
-            case "\\opengame":  return new OpenGameCommand(client, args);
-            case "\\joingame":  return new JoinGameCommand(client, args);
-            case "\\startgame": return new StartGameCommand(client, args);
-            case "\\answer":    return new AnswerCommand(client, args);
-            case "\\stop":      return new StopCommand(client);
-            case "\\help":      return new HelpCommand(client);
-            default:            return new InvalidCommand(client, "Unknown command: " + command + ". Try \\help for a list of commands.");
+        BiFunction<ClientThread, String, Command> factory = COMMANDS.get(command);
+        if (factory != null) {
+            return factory.apply(client, args);
         }
+        return new InvalidCommand(client, "Unknown command: " + command + ". Try \\help for a list of commands.");
     }
 }

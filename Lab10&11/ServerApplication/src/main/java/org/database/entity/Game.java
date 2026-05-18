@@ -1,12 +1,18 @@
 package org.database.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.envers.Audited;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Audited
 @Entity
 @Table(name = "game")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

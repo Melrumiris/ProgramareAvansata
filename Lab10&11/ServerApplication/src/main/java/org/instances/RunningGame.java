@@ -98,6 +98,7 @@ public class RunningGame extends Thread {
         broadcast("=== Game '" + name + "' is starting! ===");
         broadcast("You will have " + (QUESTION_TIME_MS / 1000) + " seconds per question.");
 
+        questionLoop:
         for (int i = 0; i < questions.size(); i++) {
             currentQuestionIndex = i;
             answeredThisRound.clear();
@@ -108,12 +109,19 @@ public class RunningGame extends Thread {
             broadcast(q.getText());
             broadcast("[You have " + (QUESTION_TIME_MS / 1000) + " seconds. Send: \\answer <your answer>]");
 
+            // Spurious-wakeup-safe wait: re-check the condition and recalculate
+            // remaining time after every wakeup.
             synchronized (roundLock) {
-                try {
-                    roundLock.wait(QUESTION_TIME_MS);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
+                long deadline = questionStartTime + QUESTION_TIME_MS;
+                while (answeredThisRound.size() < players.size()) {
+                    long timeToWait = deadline - System.currentTimeMillis();
+                    if (timeToWait <= 0) break;
+                    try {
+                        roundLock.wait(timeToWait);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break questionLoop;
+                    }
                 }
             }
 
@@ -159,7 +167,7 @@ public class RunningGame extends Thread {
         }
 
         gameEntity.setState(GameState.FINISHED);
-        gameRepository.update(gameEntity);
+        gameRepository.updateGameState(gameEntity.getId(), GameState.FINISHED);
 
         synchronized (players) {
             for (ClientThread client : players) {

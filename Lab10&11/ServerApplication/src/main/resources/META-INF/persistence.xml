@@ -5,6 +5,7 @@
         <class>org.database.entity.Question</class>
         <class>org.database.entity.Game</class>
         <class>org.database.entity.Result</class>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/JavaLab11"/>
@@ -13,6 +14,13 @@
 
             <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
             <property name="hibernate.show_sql" value="false"/>
+
+            <!-- Second-level cache (Caffeine via JCache) -->
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="jcache"/>
+            <property name="hibernate.javax.cache.provider"
+                      value="com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider"/>
         </properties>
     </persistence-unit>
 </persistence>
