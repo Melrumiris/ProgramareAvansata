@@ -20,9 +20,11 @@ public class CommandFactory {
                     Map.entry("\\joingame",  JoinGameCommand::new),
                     Map.entry("\\startgame", StartGameCommand::new),
                     Map.entry("\\answer",    AnswerCommand::new),
-                    Map.entry("\\search",    SearchCommand::new),
-                    Map.entry("\\stop",      (client, args) -> new StopCommand(client)),
-                    Map.entry("\\help",      (client, args) -> new HelpCommand(client))
+                    Map.entry("\\search",       SearchCommand::new),
+                    Map.entry("\\stop",         (client, args) -> new StopCommand(client)),
+                    Map.entry("\\help",         (client, args) -> new HelpCommand(client)),
+                    Map.entry("\\getvocabulary",(client, args) -> new GetVocabularyCommand(client)),
+                    Map.entry("\\addbot",       AddBotCommand::new)
             );
 
     public static Command createCommand(String cmd, ClientThread client) {

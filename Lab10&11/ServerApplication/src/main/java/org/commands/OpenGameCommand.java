@@ -39,6 +39,12 @@ public class OpenGameCommand implements Command {
             return;
         }
 
+        // Check if the game exists in the database (from a previous run)
+        if (gameRepository.findByName(gameName) != null) {
+            client.sendMessage("Error: A game with the name '" + gameName + "' already exists in the database.");
+            return;
+        }
+
         List<Question> questions = questionRepository.findRandomN(RunningGame.QUESTIONS_PER_GAME);
         if (questions.isEmpty()) {
             client.sendMessage("[Error] No questions available. Load questions first.");

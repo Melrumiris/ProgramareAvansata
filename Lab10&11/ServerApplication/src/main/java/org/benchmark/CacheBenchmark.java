@@ -12,12 +12,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * JMH benchmark comparing cold (cache-bypass) vs. warm (second-level cache) reads.
- *
- * Run via the fat jar:
- *   java -jar target/benchmarks.jar CacheBenchmark
- */
+
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
@@ -41,18 +36,11 @@ public class CacheBenchmark {
         JPAUtil.close();
     }
 
-    /**
-     * Reads all questions; subsequent iterations are served from the second-level cache.
-     */
     @Benchmark
     public List<Question> findAllQuestions_cached() {
         return questionRepository.findAll();
     }
 
-    /**
-     * Reads all questions with the second-level cache evicted beforehand.
-     * This simulates a cold read on every iteration.
-     */
     @Benchmark
     public List<Question> findAllQuestions_coldEvict() {
         JPAUtil.getEntityManagerFactory().getCache().evictAll();

@@ -48,10 +48,6 @@ public class ResultRepository {
         });
     }
 
-    /**
-     * Dynamic search using the JPA Criteria API.
-     * All fields in {@link ResultFilterCriteria} are optional; null means "no filter".
-     */
     public List<Result> search(ResultFilterCriteria criteria) {
         return QueryLogger.timed(log, "search(" + criteria + ")", () -> {
             EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();

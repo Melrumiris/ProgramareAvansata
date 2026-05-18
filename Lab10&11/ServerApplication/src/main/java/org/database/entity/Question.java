@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "question")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

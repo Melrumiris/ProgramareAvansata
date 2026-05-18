@@ -16,12 +16,12 @@ public class GameServer {
     public static final int PORT = 9999;
     private volatile boolean running = true;
     private final ServerSocket serverSocket;
-    private final ExecutorService pool = Executors.newFixedThreadPool(16);
+    private final ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor();
     private final ConcurrentHashMap<String, RunningGame> openGames = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, RunningGame> runningGames = new ConcurrentHashMap<>();
 
     public GameServer() throws IOException {
-        serverSocket = new ServerSocket(PORT);
+        serverSocket = new ServerSocket(PORT, 10000);
         System.out.println("Server is waiting on port " + PORT + "...");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             running = false;

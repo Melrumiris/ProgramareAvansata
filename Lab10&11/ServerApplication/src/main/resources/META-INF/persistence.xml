@@ -21,6 +21,7 @@
             <property name="hibernate.cache.region.factory_class" value="jcache"/>
             <property name="hibernate.javax.cache.provider"
                       value="com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider"/>
+            <property name="hibernate.javax.cache.missing_cache_strategy" value="create"/>
         </properties>
     </persistence-unit>
 </persistence>

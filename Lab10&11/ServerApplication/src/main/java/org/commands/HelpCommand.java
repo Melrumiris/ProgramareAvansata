@@ -18,6 +18,7 @@ public class HelpCommand implements Command {
         client.sendMessage("\\opengame <name>        - Create a new game lobby");
         client.sendMessage("\\joingame <name>        - Join an open game lobby");
         client.sendMessage("\\startgame <name>       - Start the game you created");
+        client.sendMessage("\\addbot <game> <name> <type> [difficulty] - Spawn an AI bot (types: random, custom, llm; difficulties: easy, hard). Only game creator");
         client.sendMessage("\\answer <your answer>   - Submit your answer during a game");
         client.sendMessage("\\search [player:<p>] [minscore:<n>] [game:<g>] - Search results with filters");
         client.sendMessage("\\stop                   - Stop the server");

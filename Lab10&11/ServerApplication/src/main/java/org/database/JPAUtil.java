@@ -21,15 +21,10 @@ public final class JPAUtil {
         return emf;
     }
 
-    /**
-     * Replaces the shared EMF. Intended for test use only — allows switching
-     * to an in-memory persistence unit without touching production config.
-     */
     public static void setEntityManagerFactory(EntityManagerFactory override) {
         emf = override;
     }
 
-    /** Call once on application shutdown to release all JPA/JDBC resources. */
     public static void close() {
         if (emf != null && emf.isOpen()) {
             emf.close();

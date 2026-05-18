@@ -47,10 +47,6 @@ public class GameRepository {
         });
     }
 
-    /**
-     * Transactional JPQL modifying query: updates the state of a game directly
-     * in the database without loading the full entity.
-     */
     public void updateGameState(UUID id, GameState newState) {
         QueryLogger.timedVoid(log, "updateGameState(" + id + ", " + newState + ")", () -> {
             EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
