@@ -1,7 +1,7 @@
-package org.reflection;
+package org.exec;
 import java.lang.reflect.Method;
 
-public class Main {
+public class Compulsory {
     public static void main(String[] args) {
         String className = "org.example.Task";
 
